@@ -1,14 +1,22 @@
 [
   {
     "name": "GitHub",
-    "url": "https://github.com/Kashyab19"
+    "url": "https://github.com/Kashyab19",
+    "tooltip": "Github"
   },
   {
     "name": "LinkedIn",
-    "url": "https://linkedin.com/in/kashyab-murali"
+    "url": "https://linkedin.com/in/kashyab-murali",
+    "tooltip": "LinkedIn"
   },
   {
     "name": "Twitter/X",
-    "url": "https://x.com/kashyab_19"
+    "url": "https://x.com/kashyab_19",
+    "tooltip":"X(formerly Twitter)"
+  },
+  {
+    "name": "Substack",
+    "url":"https://kashyabnarrates.substack.com/",
+    "tooltip":"My write up"
   }
 ]

@@ -6,10 +6,13 @@ import Achievements from "./components/Achievements";
 import SocialLinks from "./components/SocialLinks";
 import Footer from "./components/Footer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Analytics } from '@vercel/analytics/react';
+import TopicsLearning from "./components/TopicsLearning";
 
 export default function App() {
   return (
     <div className="app-container p-6 max-w-4xl mx-auto">
+      <Analytics />
       <div className="content">
         <div className="flex items-center mb-10">
           <Avatar className="mr-4 w-16 h-16">
@@ -23,6 +26,9 @@ export default function App() {
 
         <div className="mb-10">
           <About />
+        </div>
+        <div className="mb-10">
+          <TopicsLearning/>
         </div>
         <div className="mb-10">
           <Projects />

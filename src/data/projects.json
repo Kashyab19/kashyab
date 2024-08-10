@@ -19,7 +19,7 @@
     "link": "https://youtu.be/5e-TjaFTKW0?si=X6LiTjXp9btYkzYk",
     "description": "An AI-powered iOS app that lets you manage multiple credit cards efficiently",
     "stack": "SwiftUI, NodeJS, Firebase, MongoDB, Heroku, Google Dialogflow",
-    "status": "Archived",
+    "status": "Demo",
     "variant":"destructive"
 
   },
@@ -28,7 +28,7 @@
     "link": "https://docs.google.com/presentation/d/1Cacjb7mV66TT4Jvf68_GcLdXeyIK9mmGaxJcfYwFsUo/edit?usp=sharing",
     "description": "a web3 data marketplace that lets you tokenize and sell survey data. Won 3rd place at <b>Harvard University</b>",
     "stack": "Tron, ReactJS",
-    "status": "Archived",
+    "status": "Demo",
     "variant":"destructive"
   }
 ]

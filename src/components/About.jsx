@@ -7,8 +7,8 @@ const About = () => {
       About
     </h2>
       <p>
-        I live in Boston. I am currently learning <b> Cloud Engineering (GCP + Terraform) </b> and
-        other tech topics I am curious about.
+        I live in Boston, MA. I am currently learning <b> Cloud Engineering (GCP + Terraform) </b> and
+        other tech topics I am curious about. Oh, and sometimes I try to write too!
       </p>
     </section>
   );
