@@ -1,0 +1,75 @@
+/* General body styling */
+body, html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7; /* Optional: Set a background color */
+  width: 100%;
+}
+
+/* Container to center content horizontally */
+.app-container {
+  max-width: 800px; /* Maximum width for larger screens */
+  margin: 0 auto; /* Centers the content horizontally */
+  padding: 20px; /* Adds some padding around the content */
+}
+
+/* Center align text within the container */
+h1, h2 {
+  text-align: left; /* Keeps headings aligned to the left */
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  word-wrap: break-word;
+}
+
+th, td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+a {
+  color: #3498db;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  .app-container {
+    padding: 10px;
+    max-width: 100%; /* Allow the container to take full width on small screens */
+  }
+
+  h1 {
+    font-size: 2rem; /* Adjust heading size for smaller screens */
+  }
+
+  h2 {
+    font-size: 1.5rem; /* Adjust subheading size for smaller screens */
+  }
+
+  table, th, td {
+    font-size: 0.9rem; /* Adjust table font size for readability */
+  }
+
+  th, td {
+    padding: 8px 10px; /* Reduce padding for smaller screens */
+  }
+
+  table {
+    word-wrap: break-word; /* Ensure long text wraps properly */
+  }
+}

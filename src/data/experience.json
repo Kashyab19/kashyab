@@ -1,0 +1,12 @@
+[
+  {
+    "company": "G2W Consulting, Blockchain Intern",
+    "description": "Architected and developed a web3 healthcare auction platform, from system design to MVP deployment within 6 months",
+    "stack": "ReactJS, Solidity, Polygon, Amazon EC2, AWS Keyspace for Cassandra"
+  },
+  {
+    "company": "Verizon, Software Engineer",
+    "description": "Engineered 25 different receipts using Spring Boot across physical and digital stores serving 140M customers",
+    "stack": "Spring Boot, AWS S3, Kibana, New Relics"
+  }
+]

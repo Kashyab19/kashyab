@@ -1,0 +1,34 @@
+[
+  {
+    "name": "Authentication Web App",
+    "description": "A simple web app that lets you create a user and authenticate them",
+    "stack": "Go, Gorm, Postgres, GCP services like SQL, DNS, VPC, Logging, Terraform, Packer, Github Actions for CI/CD",
+    "status": "WIP",
+    "variant":"default"
+  },
+  {
+    "name": "Easy Summaries",
+    "link": "https://chromewebstore.google.com/detail/easy-summaries/oaoiejebnjkkkeoonoogjggkijjcagco",
+    "description": "A Chrome Extension that lets you summarize the web easily. 100 organic users in less than 1 month",
+    "stack": "Vanilla JS, NodeJS, OpenAI, Heroku, AWS S3, AWS Lambda",
+    "status": "Active",
+    "variant": "default"
+  },
+  {
+    "name": "Fintelligent",
+    "link": "https://youtu.be/5e-TjaFTKW0?si=X6LiTjXp9btYkzYk",
+    "description": "An AI-powered iOS app that lets you manage multiple credit cards efficiently",
+    "stack": "SwiftUI, NodeJS, Firebase, MongoDB, Heroku, Google Dialogflow",
+    "status": "Archived",
+    "variant":"destructive"
+
+  },
+  {
+    "name": "DeForms",
+    "link": "https://docs.google.com/presentation/d/1Cacjb7mV66TT4Jvf68_GcLdXeyIK9mmGaxJcfYwFsUo/edit?usp=sharing",
+    "description": "a web3 data marketplace that lets you tokenize and sell survey data. Won 3rd place at <b>Harvard University</b>",
+    "stack": "Tron, ReactJS",
+    "status": "Archived",
+    "variant":"destructive"
+  }
+]
