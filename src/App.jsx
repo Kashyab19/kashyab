@@ -8,7 +8,7 @@ import Footer from "./components/Footer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Analytics } from '@vercel/analytics/react';
 import TopicsLearning from "./components/TopicsLearning";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/react"
 
 export default function App() {
   return (
