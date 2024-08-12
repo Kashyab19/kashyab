@@ -8,11 +8,13 @@ import Footer from "./components/Footer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Analytics } from '@vercel/analytics/react';
 import TopicsLearning from "./components/TopicsLearning";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export default function App() {
   return (
     <div className="app-container p-6 max-w-4xl mx-auto">
       <Analytics />
+      <SpeedInsights/>
       <div className="content">
         <div className="flex items-center mb-10">
           <Avatar className="mr-4 w-16 h-16">
