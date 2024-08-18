@@ -6,31 +6,43 @@ import Achievements from "./components/Achievements";
 import SocialLinks from "./components/SocialLinks";
 import Footer from "./components/Footer";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from "@vercel/analytics/react";
 import TopicsLearning from "./components/TopicsLearning";
-import { SpeedInsights } from "@vercel/speed-insights/react"
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Badge } from "@/components/ui/badge";
+import { OpportunityToast } from "./components/Toast";
+
 
 export default function App() {
   return (
     <div className="app-container p-6 max-w-4xl mx-auto">
+      <OpportunityToast/>
       <Analytics />
-      <SpeedInsights/>
+      <SpeedInsights />
       <div className="content">
-        <div className="flex items-center mb-10">
+        <div className="flex items-center flex-wrap mb-10">
           <Avatar className="mr-4 w-16 h-16">
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>KM</AvatarFallback>
           </Avatar>
-          <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-            Kashyab Murali
-          </h1>
+          <div>
+            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
+              Kashyab Murali
+            </h1>
+            <Badge variant="default" className="mt-2">
+              Open to Work
+            </Badge>
+            <Badge variant="default" className="ml-2 mt-2">
+              USA
+            </Badge>
+          </div>
         </div>
 
         <div className="mb-10">
           <About />
         </div>
         <div className="mb-10">
-          <TopicsLearning/>
+          <TopicsLearning />
         </div>
         <div className="mb-10">
           <Projects />
