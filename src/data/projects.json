@@ -1,5 +1,13 @@
 [
   {
+    "name": "Gratigram",
+    "link":"https://gratigram.vercel.app",
+    "description": "A web app where you can share what you are grateful for!",
+    "stack": "Next.js, Node.js, MongoDB, Cursor_ai",
+    "status": "Active",
+    "variant":"default"
+  },
+  {
     "name": "Authentication Web App",
     "description": "A simple web app that lets you create a user and authenticate them",
     "stack": "Go, Gorm, Postgres, GCP services like SQL, DNS, VPC, Logging, Terraform, Packer, Github Actions for CI/CD",
