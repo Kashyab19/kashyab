@@ -11,52 +11,57 @@ import TopicsLearning from "./components/TopicsLearning";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Badge } from "@/components/ui/badge";
 import { OpportunityToast } from "./components/Toast";
-
+import React, { useState, useEffect } from "react";
+import Navbar from "./components/Navbar"; // We'll create this component
 
 export default function App() {
-  return (
-    <div className="app-container p-6 max-w-4xl mx-auto">
-      <OpportunityToast/>
-      <Analytics />
-      <SpeedInsights />
-      <div className="content">
-        <div className="flex items-center flex-wrap mb-10">
-          <Avatar className="mr-4 w-16 h-16">
-            <AvatarImage src="https://github.com/shadcn.png" />
-            <AvatarFallback>KM</AvatarFallback>
-          </Avatar>
-          <div>
-            <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              Kashyab Murali
-            </h1>
-            <Badge variant="default" className="mt-2">
-              Open to Work
-            </Badge>
-            <Badge variant="default" className="ml-2 mt-2">
-              USA
-            </Badge>
-          </div>
-        </div>
+  const [activeSection, setActiveSection] = useState("");
 
-        <div className="mb-10">
-          <About />
-        </div>
-        <div className="mb-10">
-          <TopicsLearning />
-        </div>
-        <div className="mb-10">
-          <Projects />
-        </div>
-        <div className="mb-10">
-          <Experience />
-        </div>
-        <div className="mb-10">
-          <Achievements />
-        </div>
-        <div className="mb-10">
+  useEffect(() => {
+    const handleScroll = () => {
+      const sections = document.querySelectorAll("section[id]");
+      const scrollPosition = window.scrollY + 100; // Adjust this value based on your navbar height
+
+      for (let i = 0; i < sections.length; i++) {
+        const section = sections[i];
+        if (scrollPosition >= section.offsetTop && scrollPosition < (section.offsetTop + section.offsetHeight)) {
+          setActiveSection(section.id);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Call once to set initial active section
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50">
+      <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
+      <div className="max-w-4xl mx-auto px-4 py-6">
+        <OpportunityToast />
+        <Analytics />
+        <SpeedInsights />
+        <div className="space-y-12">
+          <section id="about">
+            <About />
+          </section>
+          <section id="topics-learning">
+            <TopicsLearning />
+          </section>
+          <section id="projects">
+            <Projects />
+          </section>
+          <section id="experience">
+            <Experience />
+          </section>
+          <section id="achievements">
+            <Achievements />
+          </section>
           <SocialLinks />
+          <Footer />
         </div>
-        <Footer />
       </div>
     </div>
   );

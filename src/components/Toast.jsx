@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { CookieIcon } from "@radix-ui/react-icons";
 
 export function OpportunityToast() {
   const { toast } = useToast();
@@ -11,24 +10,27 @@ export function OpportunityToast() {
     toast({
       description: (
         <div className="flex items-center">
-          <CookieIcon className="h-6 w-6 mr-4" />
+          <span className="text-2xl mr-2" role="img" aria-label="Announcement">📣</span>
           <div>
-            <span className="block font-semibold">Your next hire powered by coffee!</span>
+            <span className="font-bold">Open to new opportunities</span>
+            <span className="block text-sm text-gray-500">Let's connect and explore possibilities!</span>
           </div>
         </div>
       ),
-      className: "toast-custom"
+      className: "opportunity-toast",
+      duration: 5000, // Display for 5 seconds
     });
 
     // Inject custom styles directly into the document head
     const toastStyles = `
-      .toast-custom {
-        background-color: #3B82F6 !important;
-        color: #ffffff !important;
-        padding: 1rem;
-        border-radius: 0.375rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        animation: slideInUp 0.5s ease-out;
+      .opportunity-toast {
+        background-color: #F0FDF4;
+        color: #166534;
+        border: 1px solid #BBF7D0;
+        padding: 0.75rem 1rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        animation: slideInUp 0.5s ease-out, fadeOut 0.5s ease-in 4.5s forwards;
       }
 
       @keyframes slideInUp {
@@ -42,15 +44,20 @@ export function OpportunityToast() {
         }
       }
 
+      @keyframes fadeOut {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0;
+        }
+      }
+
       @media (max-width: 768px) {
-        .toast-custom {
-          position: fixed;
-          bottom: 1rem;
-          left: 50%;
-          transform: translateX(-50%);
+        .opportunity-toast {
           width: calc(100% - 2rem);
           max-width: 400px;
-          z-index: 1000;
+          margin: 0 auto;
         }
       }
     `;
@@ -58,6 +65,10 @@ export function OpportunityToast() {
     styleSheet.type = "text/css";
     styleSheet.innerText = toastStyles;
     document.head.appendChild(styleSheet);
+
+    return () => {
+      document.head.removeChild(styleSheet);
+    };
   }, [toast]);
 
   return null;

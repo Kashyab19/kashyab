@@ -4,10 +4,8 @@ import { Award, Medal, Shell } from 'lucide-react';
 
 const Achievements = () => {
   return (
-    <section id="achievements" className="mt-10">
-      <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
-        Achievements
-      </h2>
+    <>
+      <h2 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">Achievements</h2>
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {achievements.map((item, index) => (
           <div
@@ -24,7 +22,7 @@ const Achievements = () => {
           </div>
         ))}
       </div>
-    </section>
+    </>
   );
 };
 
