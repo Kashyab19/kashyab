@@ -9,29 +9,29 @@
     {
       "name": "DevOps",
       "skills": ["AWS (IAM, EC2, Keyspace, Lambda, S3)", "GCP (SQL, DNS, Functions, Dialogflow)", "GitHub CI/CD"],
-      "text": "text-green-800",
-      "color": "bg-green-100",
+      "text": "text-blue-800",
+      "color": "bg-blue-100",
       "icon": "Container"  
     },
     {
       "name": "Infrastructure as Code",
       "skills": ["Terraform", "Packer"],
-      "text": "text-red-800",
-      "color": "bg-red-100",
+      "text": "text-blue-800",
+      "color": "bg-blue-100",
       "icon": "Workflow" 
     },
     {
       "name": "Software Tools",
       "skills": ["Jira", "New Relic", "Kibana", "Figma", "Confluence"],
-      "text": "text-green-800",
-      "color": "bg-green-100",
+      "text": "text-blue-800",
+      "color": "bg-blue-100",
       "icon": "Wrench"
     },
     {
       "name": "Databases",
       "skills": ["DynamoDB", "MongoDB", "MySQL", "Cassandra", "Postgres"],
-      "text": "text-red-800",
-      "color": "bg-red-100",
+     "text": "text-blue-800",
+      "color": "bg-blue-100",
       "icon": "DatabaseZap"  
     }
 ]
