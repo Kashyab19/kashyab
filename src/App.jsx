@@ -1,39 +1,64 @@
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import "./App.css";
-import About from "./components/About";
-import Experience from "./components/Experience";
-import Projects from "./components/Projects";
-import Achievements from "./components/Achievements";
-import SocialLinks from "./components/SocialLinks";
+import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Analytics } from "@vercel/analytics/react";
-import TopicsLearning from "./components/TopicsLearning";
-import { SpeedInsights } from "@vercel/speed-insights/react";
-import { Badge } from "@/components/ui/badge";
 import { OpportunityToast } from "./components/Toast";
-import React, { useState, useEffect } from "react";
-import Navbar from "./components/Navbar"; // We'll create this component
+import { trackPortfolioView } from './services/Tracking';
+
+// Lazy load components
+const About = lazy(() => import("./components/About"));
+const Experience = lazy(() => import("./components/Experience"));
+const Projects = lazy(() => import("./components/Projects"));
+const Achievements = lazy(() => import("./components/Achievements"));
+const TopicsLearning = lazy(() => import("./components/TopicsLearning"));
+const SocialLinks = lazy(() => import("./components/SocialLinks"));
+
+// Lazy load third-party components
+const Analytics = lazy(() => import("@vercel/analytics/react").then(module => ({ default: module.Analytics })));
+const SpeedInsights = lazy(() => import("@vercel/speed-insights/react").then(module => ({ default: module.SpeedInsights })));
 
 export default function App() {
   const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
+    // Debounce scroll event
+    let timeoutId = null;
     const handleScroll = () => {
-      const sections = document.querySelectorAll("section[id]");
-      const scrollPosition = window.scrollY + 100; // Adjust this value based on your navbar height
-
-      for (let i = 0; i < sections.length; i++) {
-        const section = sections[i];
-        if (scrollPosition >= section.offsetTop && scrollPosition < (section.offsetTop + section.offsetHeight)) {
-          setActiveSection(section.id);
-          break;
-        }
+      if (timeoutId) {
+        clearTimeout(timeoutId);
       }
+      timeoutId = setTimeout(() => {
+        const sections = document.querySelectorAll("section[id]");
+        const scrollPosition = window.scrollY + 100;
+
+        for (let i = 0; i < sections.length; i++) {
+          const section = sections[i];
+          if (scrollPosition >= section.offsetTop && scrollPosition < (section.offsetTop + section.offsetHeight)) {
+            setActiveSection(section.id);
+            break;
+          }
+        }
+      }, 100);
     };
 
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Call once to set initial active section
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    // Delay non-critical operations
+    const timer = setTimeout(() => {
+      trackPortfolioView();
+    }, 3000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -41,28 +66,22 @@ export default function App() {
       <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
       <div className="max-w-4xl mx-auto px-4 py-6">
         <OpportunityToast />
+        <Suspense fallback={<div>Loading...</div>}>
+          <div className="space-y-12">
+            <section id="about"><About /></section>
+            <section id="topics-learning"><TopicsLearning /></section>
+            <section id="projects"><Projects /></section>
+            <section id="experience"><Experience /></section>
+            <section id="achievements"><Achievements /></section>
+            <SocialLinks />
+          </div>
+        </Suspense>
+        <Footer />
+      </div>
+      <Suspense fallback={null}>
         <Analytics />
         <SpeedInsights />
-        <div className="space-y-12">
-          <section id="about">
-            <About />
-          </section>
-          <section id="topics-learning">
-            <TopicsLearning />
-          </section>
-          <section id="projects">
-            <Projects />
-          </section>
-          <section id="experience">
-            <Experience />
-          </section>
-          <section id="achievements">
-            <Achievements />
-          </section>
-          <SocialLinks />
-          <Footer />
-        </div>
-      </div>
+      </Suspense>
     </div>
   );
 }
