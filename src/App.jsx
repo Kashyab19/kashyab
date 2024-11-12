@@ -12,6 +12,7 @@ const Projects = lazy(() => import("./components/Projects"));
 const Achievements = lazy(() => import("./components/Achievements"));
 const TopicsLearning = lazy(() => import("./components/TopicsLearning"));
 const SocialLinks = lazy(() => import("./components/SocialLinks"));
+// const TechStack = lazy(() => import("./components/TechStack"));
 
 // Lazy load third-party components
 const Analytics = lazy(() => import("@vercel/analytics/react").then(module => ({ default: module.Analytics })));
@@ -69,10 +70,11 @@ export default function App() {
         <Suspense fallback={<div>Loading...</div>}>
           <div className="space-y-12">
             <section id="about"><About /></section>
-            <section id="topics-learning"><TopicsLearning /></section>
             <section id="projects"><Projects /></section>
+            <section id="topics-learning"><TopicsLearning /></section>
             <section id="experience"><Experience /></section>
             <section id="achievements"><Achievements /></section>
+            {/* <section id="tech-stack"><TechStack /></section> */}
             <SocialLinks />
           </div>
         </Suspense>

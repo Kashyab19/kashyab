@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { cn } from "@/lib/utils";
 import { Menu, X } from "lucide-react";
+import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 
 const navItems = [
   { id: "about", label: "About" },
-  { id: "topics-learning", label: "Skills" },
+
   { id: "projects", label: "Projects" },
+  { id: "topics-learning", label: "Skills" },
   { id: "experience", label: "Experience" },
   { id: "achievements", label: "Achievements" },
 ];
@@ -35,10 +37,21 @@ const Navbar = ({ activeSection, setActiveSection }) => {
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-3">
             <a href="#" onClick={() => handleNavClick("about")} className="text-xl font-bold text-indigo-600">KM</a>
-            <div className="text-black-800 px-2 py-1 rounded-md text-xs font-medium flex items-center border border-green-300">
+            {/* <div className="text-black-800 px-2 py-1 rounded-md text-xs font-medium flex items-center border border-green-300">
               <span className="w-1.5 h-1.5 bg-green-500 rounded-full mr-1.5"></span>
               Open to work
-            </div>
+            </div> */}
+
+            <AnimatedGradientText>
+        🎉 <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
+        <span
+          className={cn(
+            `text-xs font-bold inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
+          )}
+        >
+          Open to work
+        </span>
+      </AnimatedGradientText>
           </div>
           <div className="hidden md:flex items-center space-x-4">
             {navItems.map((item) => (
