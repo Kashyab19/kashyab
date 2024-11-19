@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { OpportunityToast } from "./components/Toast";
 import { trackPortfolioView } from './services/Tracking';
+import ListeningCard from "./components/ListeningCard";
 
 // Lazy load components
 const About = lazy(() => import("./components/About"));
@@ -70,6 +71,7 @@ export default function App() {
         <Suspense fallback={<div>Loading...</div>}>
           <div className="space-y-12">
             <section id="about"><About /></section>
+           
             <section id="projects"><Projects /></section>
             <section id="topics-learning"><TopicsLearning /></section>
             <section id="experience"><Experience /></section>
