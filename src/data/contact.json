@@ -5,6 +5,11 @@
     "tooltip": "Github"
   },
   {
+    "name": "Email",
+    "url": "mailto:murali.k@northeastern.edu",
+    "tooltip": "Email"
+  },
+  {
     "name": "LinkedIn",
     "url": "https://linkedin.com/in/kashyab-murali",
     "tooltip": "LinkedIn"
