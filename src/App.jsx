@@ -1,14 +1,15 @@
 import React, { useState, useEffect, lazy, Suspense } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { OpportunityToast } from "./components/Toast";
 import { trackPortfolioView } from './services/Tracking';
 import ListeningCard from "./components/ListeningCard";
-import DemoCard from "./components/DemoCard"; // Import the DemoCard component
-
+import DemoCard from "./components/DemoCard";
 
 // Lazy load components
+const MableResources = lazy(() => import("./components/Library/MableResources"));
 const About = lazy(() => import("./components/About"));
 const Experience = lazy(() => import("./components/Experience"));
 const Projects = lazy(() => import("./components/Projects"));
@@ -21,7 +22,7 @@ const SocialLinks = lazy(() => import("./components/SocialLinks"));
 const Analytics = lazy(() => import("@vercel/analytics/react").then(module => ({ default: module.Analytics })));
 const SpeedInsights = lazy(() => import("@vercel/speed-insights/react").then(module => ({ default: module.SpeedInsights })));
 
-export default function App() {
+const MainContent = () => {
   const [activeSection, setActiveSection] = useState("");
 
   useEffect(() => {
@@ -66,28 +67,46 @@ export default function App() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50">
-      <Navbar activeSection={activeSection} setActiveSection={setActiveSection} />
-      <div className="max-w-4xl mx-auto px-4 py-6">
-        <OpportunityToast />
-        <Suspense fallback={<div>Loading...</div>}>
-          <div className="space-y-12">
-            <section id="about"><About /></section>
-            <section id="demo-card"><DemoCard/></section>
-            <section id="projects"><Projects /></section>
-            <section id="topics-learning"><TopicsLearning /></section>
-            <section id="experience"><Experience /></section>
-            <section id="achievements"><Achievements /></section>
-            {/* <section id="tech-stack"><TechStack /></section> */}
-            <SocialLinks />
-          </div>
-        </Suspense>
-        <Footer />
-      </div>
-      <Suspense fallback={null}>
-        <Analytics />
-        <SpeedInsights />
+    <div className="max-w-4xl mx-auto px-4 py-6">
+      <OpportunityToast />
+      <Suspense fallback={<div>Loading...</div>}>
+        <div className="space-y-12">
+          <section id="about"><About /></section>
+          <section id="demo-card"><DemoCard/></section>
+          <section id="projects"><Projects /></section>
+          <section id="topics-learning"><TopicsLearning /></section>
+          <section id="experience"><Experience /></section>
+          <section id="achievements"><Achievements /></section>
+          {/* <section id="tech-stack"><TechStack /></section> */}
+          <SocialLinks />
+        </div>
       </Suspense>
+      <Footer />
     </div>
+  );
+};
+
+export default function App() {
+  return (
+    <Router>
+      <div className="min-h-screen bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<MainContent />} />
+          <Route 
+            path="/meetmable" 
+            element={
+              <Suspense fallback={<div>Loading...</div>}>
+                <MableResources />
+              </Suspense>
+            } 
+          />
+        </Routes>
+        <Suspense fallback={null}>
+          <Analytics />
+          <SpeedInsights />
+        </Suspense>
+      </div>
+    </Router>
   );
 }
