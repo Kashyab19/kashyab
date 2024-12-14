@@ -25,8 +25,8 @@ const MableResources = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
       <h4 className="scroll-m-20 border-b pb-2 text-2xl font-medium tracking-tight first:mt-0">
-        Hi Jared, 
-          <br/> I compiled a list on how my current projects align with the Mable's requirements and, some notes on Mable's website
+        [Archived] 
+          <br/> I compiled a list for an interview on how my current projects align with the Mable's requirements and, some notes on Mable's website
       </h4>
       <div className="mt-6 gap-4 sm:grid-cols-2">
         <div className="bg-white p-4 rounded-lg shadow-md">
