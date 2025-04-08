@@ -1,11 +1,11 @@
 [
   {
-    "name": "Gratigram",
-    "link":"https://gratigram.vercel.app",
-    "description": "A web app where you can share what you are grateful for!",
-    "stack": "Next.js, Node.js, MongoDB, Cursor_ai",
+    "name": "Easy Summaries",
+    "link": "https://chromewebstore.google.com/detail/easy-summaries/oaoiejebnjkkkeoonoogjggkijjcagco",
+    "description": "A Chrome Extension that lets you summarize the web easily. 100 organic users in less than 1 month",
+    "stack": "Vanilla JS, NodeJS, OpenAI, Heroku, AWS S3, AWS Lambda",
     "status": "Active",
-    "variant":"default"
+    "variant": "default"
   },
   {
     "name": "Authentication Web App",
@@ -15,14 +15,6 @@
     "variant":"default"
   },
   {
-    "name": "Easy Summaries",
-    "link": "https://chromewebstore.google.com/detail/easy-summaries/oaoiejebnjkkkeoonoogjggkijjcagco",
-    "description": "A Chrome Extension that lets you summarize the web easily. 100 organic users in less than 1 month",
-    "stack": "Vanilla JS, NodeJS, OpenAI, Heroku, AWS S3, AWS Lambda",
-    "status": "Active",
-    "variant": "default"
-  },
-  {
     "name": "Fintelligent",
     "link": "https://youtu.be/5e-TjaFTKW0?si=X6LiTjXp9btYkzYk",
     "description": "An AI-powered iOS app that lets you manage multiple credit cards efficiently",
@@ -30,6 +22,23 @@
     "status": "Demo",
     "variant":"destructive"
 
+  },
+  {
+    "name": "Cron Jobs Visualizer",
+    "link": "https://youtu.be/5e-TjaFTKW0?si=X6LiTjXp9btYkzYk",
+    "description": "A simple web app that lets you visualize the cron job expression",
+    "stack": "ReactJS, FastAPI (Python) ",
+    "status": "Active",
+    "variant":"default"
+
+  },
+  {
+    "name": "Gratigram",
+    "link":"https://gratigram.vercel.app",
+    "description": "A web app where you can share what you are grateful for!",
+    "stack": "Next.js, Node.js, MongoDB, Cursor_ai",
+    "status": "Active",
+    "variant":"default"
   },
   {
     "name": "DeForms",
