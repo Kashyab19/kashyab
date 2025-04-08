@@ -1,4 +1,8 @@
-[
+[ {
+  "company": "Tradible, Founding Blockchain Engineer",
+  "description": "Platform that blends traditional collecting (think trading cards, sports memorabilia, or comics) with modern tech like blockchain and tokenization.",
+  "stack": "TypeScript, AWS, Solidity"
+},
   {
     "company": "G2W Consulting, Blockchain Intern",
     "description": "Architected and developed a web3 healthcare auction platform, from system design to MVP deployment within 6 months",

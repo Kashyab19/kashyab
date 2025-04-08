@@ -31,12 +31,11 @@ const About = () => {
           <div className="mt-3">
             <p>
               My name is <span className="font-semibold">Kashyab Murali</span>, 
-              a full stack engineer based out of Boston, MA. I quit my job in 2022 
-              at Verizon to pursue my Masters' in the States. Little did I know 
-              that I would end up deep diving into a lot of topics that I am 
-              curious about. I am also very active on X following all the tech 
-              news and attending hackathons.
+              a full stack engineer based in Boston (a beautiful city). I am currently working at Tradible, a card collectors paradise, as a Founding Full Stack Engineer. 
+              I am responsible for building the core components of the platform -- learning from fantastic minds every day about business, engineering, and product. 
             </p>
+            <br />
+            <p>Current read: <span className="font-semibold">The Almanack of Naval Ravikant by Eric Jorgenson</span></p>
           </div>
           
           {/* Social Links Section */}
