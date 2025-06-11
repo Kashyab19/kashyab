@@ -1,7 +1,7 @@
 [ {
-  "company": "Tradible, Founding Blockchain Engineer",
-  "description": "Platform that blends traditional collecting (think trading cards, sports memorabilia, or comics) with modern tech like blockchain and tokenization.",
-  "stack": "TypeScript, AWS, Solidity"
+  "company": "Tradible, Founding  Engineer",
+  "description": "Imagine you own a rare, expensive rookie card. Instead of the hassle of selling it in person, Tradible takes the physical card, secures it in a vault, and gives you a digital certificate of ownership—like a stock certificate.You can then instantly sell that 'stock' to anyone in the world on their platform.",
+  "stack": "TypeScript, AWS S3, AWS RDS, AWS Lambda"
 },
   {
     "company": "G2W Consulting, Blockchain Intern",
