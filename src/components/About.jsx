@@ -30,12 +30,10 @@ const About = () => {
         <div className="flex-1">
           <div className="mt-3">
             <p>
-              My name is <span className="font-semibold">Kashyab Murali</span>, 
-              a full stack engineer based in Boston (a beautiful city). I am currently working at Tradible, a card collectors paradise, as a Founding Full Stack Engineer. 
-              I am responsible for building the core components of the platform -- learning from fantastic minds every day about business, engineering, and product. 
+            Hi, I am Kashyab! Things I do in my free time: Build, Read, and Listen. I am a Founding Engineer at Tradible Marketplace unlocking liquidity of physical collectibles and verifying the ownership onchain.
             </p>
             <br />
-            <p>Current read: <span className="font-semibold">The Almanack of Naval Ravikant by Eric Jorgenson</span></p>
+            <p>Current read: <span className="font-semibold">[June 2025] The Journal of Sigmund Freud</span></p>
           </div>
           
           {/* Social Links Section */}
