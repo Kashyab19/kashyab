@@ -72,7 +72,6 @@ const MainContent = () => {
       <Suspense fallback={<div>Loading...</div>}>
         <div className="space-y-12">
           <section id="about"><About /></section>
-        \
           <section id="experience"><Experience /></section>
           <section id="projects"><Projects /></section>
           <section id="topics-learning"><TopicsLearning /></section>
