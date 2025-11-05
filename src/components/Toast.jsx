@@ -1,5 +1,3 @@
-"use client";
-
 import { useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
