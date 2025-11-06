@@ -58,7 +58,7 @@ function Home() {
         <ul className="section-list">
           {works.map((work, index) => (
             <li key={index}>
-              — <a href={work.url} target="_blank" rel="noreferrer" className="link-external">{work.title}</a>: {work.description}
+              <a href={work.url} target="_blank" rel="noreferrer" className="link-external">{work.title}</a> — {work.description}
             </li>
           ))}
         </ul>
@@ -68,7 +68,7 @@ function Home() {
         <h2 className="section-title">a few things i believe in</h2>
         <ul className="section-list">
           {beliefs.map((belief, index) => (
-            <li key={index}>— {belief}</li>
+            <li key={index}>{belief}</li>
           ))}
         </ul>
       </section>
