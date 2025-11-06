@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import "./App.css";
 import profileImage from "./assets/kashyab-murali.jpg";
 import { socialLinks, personalInfo, works, beliefs, navLinks } from "./data/personal.jsx";
@@ -11,6 +11,8 @@ const SpeedInsights = lazy(() =>
   import("@vercel/speed-insights/react").then((module) => ({ default: module.SpeedInsights }))
 );
 const MableResources = lazy(() => import("./components/Library/MableResources"));
+const Writings = lazy(() => import("./components/Blog/Writings"));
+const Post = lazy(() => import("./components/Blog/Post"));
 
 function Header() {
   return (
@@ -74,6 +76,7 @@ function Home() {
       </section>
 
       <nav className="nav-links">
+        <Link to="/writings">writings</Link>
         {navLinks.map((link) => (
           <a
             key={link.label}
@@ -97,10 +100,26 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
+            path="/writings"
+            element={
+              <Suspense fallback={<div />}>
+                <Writings />
+              </Suspense>
+            }
+          />
+          <Route
             path="/meetmable"
             element={
               <Suspense fallback={<div />}>
                 <MableResources />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/:slug"
+            element={
+              <Suspense fallback={<div />}>
+                <Post />
               </Suspense>
             }
           />
