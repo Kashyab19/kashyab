@@ -55,7 +55,7 @@ export const personalInfo = {
   name: "Kashyab",
   heading: "hi, this is Kashyab",
   bio: "i like to build things. when i am not building, i am either writing my blogs or listening to podcasts - mostly about tech, business, economics and startups (sometimes history).",
-  current: "current: looking for a new challenge (aka full time job). based in boston",
+  current: "current: looking for a new challenge (aka full time job). open to relocating anywhere in the USA.",
 };
 
 export const works = [

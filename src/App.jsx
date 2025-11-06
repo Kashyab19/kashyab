@@ -45,7 +45,13 @@ function Home() {
 
       <p className="text-body">{personalInfo.bio}</p>
 
-      <p className="text-body-bold">{personalInfo.current}</p>
+      <p className="text-body-bold">
+        {personalInfo.current}
+      </p>
+
+    
+       {/* · <a href="https://cal.com/kashyab/15min" target="_blank" rel="noreferrer" className="link-external">book a time to chat about tech, startups</a>
+       */}
 
       <section className="section-item">
         <h2 className="section-title">works</h2>
