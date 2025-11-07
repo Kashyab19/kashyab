@@ -1,12 +1,10 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
 import "./App.css";
 import profileImage from "./assets/kashyab-murali.jpg";
 import { socialLinks, personalInfo, works, beliefs, navLinks } from "./data/personal.jsx";
 
-const Analytics = lazy(() =>
-  import("@vercel/analytics/react").then((module) => ({ default: module.Analytics }))
-);
 const SpeedInsights = lazy(() =>
   import("@vercel/speed-insights/react").then((module) => ({ default: module.SpeedInsights }))
 );
@@ -124,8 +122,8 @@ export default function App() {
             }
           />
         </Routes>
+        <Analytics />
         <Suspense fallback={null}>
-          <Analytics />
           <SpeedInsights />
         </Suspense>
       </div>
