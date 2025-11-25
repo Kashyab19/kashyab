@@ -11,6 +11,7 @@ const SpeedInsights = lazy(() =>
 const MableResources = lazy(() => import("./components/Library/MableResources"));
 const Writings = lazy(() => import("./components/Blog/Writings"));
 const Post = lazy(() => import("./components/Blog/Post"));
+const Influence = lazy(() => import("./components/Influence/Influence"));
 
 function Header() {
   return (
@@ -49,10 +50,6 @@ function Home() {
         {personalInfo.current}
       </p>
 
-    
-       {/* · <a href="https://cal.com/kashyab/15min" target="_blank" rel="noreferrer" className="link-external">book a time to chat about tech, startups</a>
-       */}
-
       <section className="section-item">
         <h2 className="section-title">works</h2>
         <ul className="section-list">
@@ -75,6 +72,7 @@ function Home() {
 
       <nav className="nav-links">
         <Link to="/writings">writings</Link>
+        <Link to="/influence">influence</Link>
         {navLinks.map((link) => (
           <a
             key={link.label}
@@ -102,6 +100,14 @@ export default function App() {
             element={
               <Suspense fallback={<div />}>
                 <Writings />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/influence"
+            element={
+              <Suspense fallback={<div />}>
+                <Influence />
               </Suspense>
             }
           />

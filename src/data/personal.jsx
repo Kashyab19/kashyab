@@ -102,3 +102,20 @@ export const navLinks = [
   },
 ];
 
+export const podcasts = [
+  {
+    name: "The Founders by David Senra",
+    url: "https://open.spotify.com/show/7txiovdzPARhjm18NwMUYj",
+  },
+  {
+    name: "Morning Brew Daily by Morning Brew",
+    url: "https://open.spotify.com/show/7nc7OQdPTekErtFSRxOBKh"
+  },
+  {
+    name: "Dwarkesh Podcast by Dwarkesh Patel",
+    url: "https://open.spotify.com/show/4JH4tybY1zX6e5hjCwU6gF",
+  },
+];
+
+export const podcastsUpdatedOn = "2025-11-25";
+

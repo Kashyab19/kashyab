@@ -1,0 +1,26 @@
+.influence-link {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-size: 16px;
+}
+
+.influence-link:hover {
+  color: #1d4ed8;
+}
+
+.section-item h2.section-title {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 768px) {
+  .influence-link {
+    font-size: 15px;
+  }
+
+  .section-item h2.section-title {
+    font-size: 20px;
+  }
+}
+
