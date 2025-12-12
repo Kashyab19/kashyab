@@ -81,6 +81,25 @@ export const works = [
   },
 ];
 
+export const projects = [
+  {
+    title: "cacheflow",
+    url: "https://github.com/Kashyab19/cacheflow",
+    description: "a simple semantic caching layer for llm responses using vector embeddings and qdrant",
+    type: "project",
+    year: 2024,
+    wip: true,
+  },
+  {
+    title: "erc1155 to erc20 converter",
+    url: "https://github.com/Kashyab19/erc1155-to-erc20",
+    description: "migrating erc 1155 to erc 20 converter using foundry",
+    type: "mini",
+    year: 2024,
+    wip: true,
+  },
+];
+
 export const beliefs = [
   "slow is fake",
   "never stop learning",

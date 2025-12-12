@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
 import "./App.css";
 import profileImage from "./assets/kashyab-murali.jpg";
-import { socialLinks, personalInfo, works, beliefs, navLinks } from "./data/personal.jsx";
+import { socialLinks, personalInfo, works, projects, beliefs, navLinks } from "./data/personal.jsx";
 
 const SpeedInsights = lazy(() =>
   import("@vercel/speed-insights/react").then((module) => ({ default: module.SpeedInsights }))
@@ -56,6 +56,21 @@ function Home() {
           {works.map((work, index) => (
             <li key={index}>
               <a href={work.url} target="_blank" rel="noreferrer" className="link-external">{work.title}</a> — {work.description}
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <section className="section-item">
+        <h2 className="section-title">projects</h2>
+        <ul className="section-list">
+          {projects.map((project, index) => (
+            <li key={index}>
+              <a href={project.url} target="_blank" rel="noreferrer" className="link-external">{project.title}</a>
+              {project.wip && <span className="pill">wip</span>}
+              {project.type === "mini" && <span className="pill">mini app</span>}
+              <span className="pill">{project.year}</span>
+              <span className="project-desc"> — {project.description}</span>
             </li>
           ))}
         </ul>
