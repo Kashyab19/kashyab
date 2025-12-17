@@ -53,70 +53,81 @@ export const socialLinks = [
 
 export const personalInfo = {
   name: "Kashyab",
-  heading: "hi, this is Kashyab",
-  bio: "i like to build things. when i am not building, i am either writing my blogs or listening to podcasts - mostly about tech, business, economics and startups (sometimes history).",
-  current: "current: looking for a new challenge (aka full time job). open to relocating anywhere in the USA.",
+  heading: "Hi, I am Kashyab!",
+  bio: "I study systems. Whether it is history, economics, or computer science, I am obsessed with how complex parts fit together to function as a whole. I take this understanding of broad mechanics and apply it to backend engineering. I do not just write code. I build infrastructure that supports real business needs. When I am not shipping software, I am writing about the intersection of technology and the economy or doing deadlifts.",
+  current: "Current: Looking for a Engineering Challenge (aka full time job). Open to relocating anywhere in the USA.",
 };
 
 export const works = [
   {
-    title: "founding engineer at tradible marketplace",
+    title: "Founding Engineer at Tradible Marketplace",
     url: "https://tradible.io",
-    description: "a marketplace for real world collectibles. built the platform from 0 - 1 in 6 months",
+    description: "A marketplace for real world collectibles. Built the platform from 0 - 1 in 6 months",
   },
   {
-    title: "software engineer at verizon",
+    title: "Software Engineer at Verizon",
     url: "https://verizon.com",
-    description: "built and maintained the receipt management system for 140M customers (high bills? not my problem)",
+    description: "Built and maintained the receipt management system for 140M customers (high bills? not my problem)",
   },
   {
-    title: "product and engineering at summerize.ai",
+    title: "Product and Engineering at summerize.ai",
     url: "https://summerize.ai",
-    description: "built an ai-powered one-click summary tool that worked on websites, videoss, and pdfs. reached 300 organic users in less than 10 days",
+    description: "Built an AI-powered one-click summary tool that worked on websites, videos, and PDFs. Reached 300 organic users in less than 10 days",
   },
   {
-    title: "thinking and writing about how systems work?",
+    title: "Thinking and writing about how systems work?",
     url: "https://kashyabnarrates.substack.com/",
-    description: "wrote nearly 10+ system design topics on my substack. grew it 1500 views and 35 subscribers.",
+    description: "Wrote nearly 10+ system design topics on my Substack. Grew it 1500 views and 35 subscribers.",
   },
 ];
 
 export const projects = [
   {
-    title: "cacheflow",
-    url: "https://github.com/Kashyab19/cacheflow",
-    description: "a simple semantic caching layer for llm responses using vector embeddings and qdrant",
+    title:"Semantic Cuts",
+    url: "https://www.linkedin.com/posts/kashyab-murali_systemdesign-vectordatabase-engineering-activity-7406685345976848385-uQq0?utm_source=share&utm_medium=member_desktop&rcm=ACoAAB8IVhoB1Gq8VH1IrUtiDWdbV5-16TuhrhE",
+    github: "https://github.com/Kashyab19/semantic-cuts",
+    description: "Search for a clipping in your videos using just a prompt (E.g., Where did Lex talk about aliens?). Building using CLIP by OpenAI, Redpanda and Qdrant DB",
     type: "project",
-    year: 2024,
+    year: 2025,
+    wip: true,
+  },
+
+  {
+    title: "Cacheflow",
+    url: "https://github.com/Kashyab19/cacheflow",
+    description: "A simple semantic caching layer for LLM responses using vector embeddings and Qdrant",
+    type: "project",
+    year: 2025,
     wip: true,
   },
   {
-    title: "erc1155 to erc20 converter",
+    title: "ERC1155 to ERC20 converter",
     url: "https://github.com/Kashyab19/erc1155-to-erc20",
-    description: "migrating erc 1155 to erc 20 converter using foundry",
+    description: "Migrating ERC 1155 to ERC 20 converter using Foundry",
     type: "mini",
-    year: 2024,
-    wip: true,
+    year: 2025,
+    wip: false,
   },
 ];
 
 export const beliefs = [
-  "slow is fake",
-  "never stop learning",
-  "be patient with the results and impatient with the actions",
+  "All we have is now",
+  "Slow is fake",
+  "Never stop learning",
+  "Be patient with the results and impatient with the actions",
 ];
 
 export const navLinks = [
   {
-    label: "email",
+    label: "Email",
     url: "mailto:kashyabmu19@gmail.com",
   },
   {
-    label: "twitter",
+    label: "Twitter",
     url: "https://x.com/karpathism",
   },
   {
-    label: "github",
+    label: "GitHub",
     url: "https://github.com/Kashyab19",
   },
 ];
