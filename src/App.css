@@ -1,9 +1,42 @@
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #fafafa;
+  --bg-tertiary: #f5f5f5;
+  --bg-pill: #f3f4f6;
+  --text-primary: #0a0a0a;
+  --text-secondary: #333;
+  --text-tertiary: #666;
+  --text-muted: #4b5563;
+  --border-color: #e5e5e5;
+  --border-light: #eee;
+  --link-color: #2563eb;
+  --link-hover: #1d4ed8;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  --bg-tertiary: #2a2a2a;
+  --bg-pill: #2a2a2a;
+  --text-primary: #ffffff;
+  --text-secondary: #e5e5e5;
+  --text-tertiary: #b3b3b3;
+  --text-muted: #999;
+  --border-color: #333;
+  --border-light: #2a2a2a;
+  --link-color: #60a5fa;
+  --link-hover: #93c5fd;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
 body, html {
   margin: 0;
   padding: 0;
-  background-color: #ffffff;
-  color: #0a0a0a;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   width: 100%;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .app-container {
@@ -22,10 +55,12 @@ body, html {
 .profile-pic-wrap {
   width: 95px;
   height: 95px;
-  border: 1px solid #e5e5e5;
-  border-radius: 5px;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
   flex-shrink: 0;
   overflow: hidden;
+  box-shadow: 0 2px 8px var(--shadow-color);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .profile-pic {
@@ -45,6 +80,7 @@ body, html {
 .socials {
   display: flex;
   justify-content: flex-end;
+  align-items: center;
   gap: 12px;
 }
 
@@ -55,11 +91,40 @@ body, html {
   width: 28px;
   height: 28px;
   color: inherit;
-  border: 1px solid #e5e5e5;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.icon-link:hover {
+  background-color: var(--bg-secondary);
 }
 
 .icon-link svg {
+  width: 20px;
+  height: 20px;
+}
+
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  color: inherit;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.theme-toggle:hover {
+  background-color: var(--bg-secondary);
+}
+
+.theme-toggle svg {
   width: 20px;
   height: 20px;
 }
@@ -78,12 +143,14 @@ table {
 
 th, td {
   padding: 12px 15px;
-  border: 1px solid #eee;
+  border: 1px solid var(--border-light);
+  transition: border-color 0.2s ease;
 }
 
 th {
-  background-color: #fafafa;
+  background-color: var(--bg-secondary);
   font-weight: 600;
+  transition: background-color 0.2s ease;
 }
 
 a {
@@ -100,15 +167,26 @@ a:hover {
   line-height: 1.2;
   font-weight: 600;
   margin: 0;
-  color: #0a0a0a;
+  color: var(--text-primary);
   letter-spacing: -0.02em;
+  transition: color 0.2s ease;
+}
+
+.page-heading {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+  margin-bottom: 32px;
+  transition: color 0.2s ease;
 }
 
 .text-body {
   font-size: 16px;
   line-height: 1.7;
   margin-bottom: 32px;
-  color: #333;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
 }
 
 .text-body-bold {
@@ -116,16 +194,20 @@ a:hover {
   line-height: 1.7;
   font-weight: 500;
   margin-bottom: 40px;
-  color: #333;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
 }
 
 .section-title {
-  font-size: 16px;
+  font-size: 13px;
   margin: 0;
-  margin-bottom: 12px;
-  font-weight: 600;
-  text-decoration: underline;
-  color: #0a0a0a;
+  margin-bottom: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 0.2s ease;
 }
 
 .section-list {
@@ -135,28 +217,48 @@ a:hover {
 }
 
 .section-list li {
-  font-size: 16px;
-  line-height: 1.7;
-  margin-bottom: 8px;
-  color: #333;
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 12px;
+  color: var(--text-secondary);
+  padding-left: 0;
+  font-weight: 400;
+  transition: color 0.2s ease;
+}
+
+.section-list li::before {
+  content: "•";
+  color: var(--text-tertiary);
+  margin-right: 8px;
+  font-weight: 300;
 }
 
 .section-item {
-  margin-bottom: 40px;
+  margin-bottom: 48px;
+  padding-top: 8px;
 }
 
 .section-item:first-of-type {
   margin-top: 0;
+  padding-top: 0;
+}
+
+.section-item:not(:first-of-type) {
+  border-top: 1px solid var(--border-color);
+  padding-top: 32px;
+  margin-top: 8px;
+  transition: border-color 0.2s ease;
 }
 
 .link-external {
   text-decoration: underline;
-  color: #2563eb;
+  color: var(--link-color);
   text-underline-offset: 2px;
+  transition: color 0.2s ease;
 }
 
 .link-external:hover {
-  color: #1d4ed8;
+  color: var(--link-hover);
 }
 
 .pill {
@@ -167,9 +269,10 @@ a:hover {
   border-radius: 12px;
   margin-left: 6px;
   vertical-align: middle;
-  background-color: #f3f4f6;
-  color: #4b5563;
-  border: 1px solid #e5e5e5;
+  background-color: var(--bg-pill);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .nav-links {
@@ -178,13 +281,15 @@ a:hover {
   flex-wrap: wrap;
   margin-top: 48px;
   padding-top: 32px;
-  border-top: 1px solid #e5e5e5;
+  border-top: 1px solid var(--border-color);
+  transition: border-color 0.2s ease;
 }
 
 .nav-links a {
   font-size: 16px;
-  color: #333;
+  color: var(--text-secondary);
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 
 .nav-links a:hover {
@@ -194,7 +299,13 @@ a:hover {
 
 .app-wrapper {
   min-height: 100vh;
-  background: #ffffff;
+  background: var(--bg-primary);
+  transition: background-color 0.2s ease;
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+  transition: color 0.2s ease;
 }
 
 @media (max-width: 768px) {
@@ -216,9 +327,14 @@ a:hover {
   .heading-large {
     font-size: 28px;
   }
+
+  .page-heading {
+    font-size: 20px;
+    margin-bottom: 24px;
+  }
   
   .section-title {
-    font-size: 15px;
+    font-size: 12px;
   }
 
   .text-body,

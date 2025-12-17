@@ -9,7 +9,7 @@ const resources = [
     variant: "default",
     link: "https://github.com/Kashyab19/Insurance-Management",
     description: "An Insurance Claims Processing System aimed at improving the efficiency and accuracy of claims management in the insurance industry",
-    type: "I helped to build the Claim Management's package, triggers, stored procedures and different business reports."
+    type: "I helped to build the Claim Management package, triggers, stored procedures and different business reports."
   },
   {
     name: "Fintelligent, a credit card manager app",
@@ -17,7 +17,7 @@ const resources = [
     variant: "success",
     link: "https://github.com/Kashyab19/financial-insight-ai",
     description: "A one-stop credit card manager app for providing insights, trend analysis.",
-    type: "I designed and built the iOS app's UI, Backend from scratch and hosted it on quick cloud deploying service"
+    type: "I designed and built the iOS app's UI, backend from scratch and hosted it on quick cloud deploying service"
   }
 ];
 
@@ -26,7 +26,7 @@ const MableResources = () => {
     <div className="max-w-4xl mx-auto px-4 py-6">
       <h4 className="scroll-m-20 border-b pb-2 text-2xl font-medium tracking-tight first:mt-0">
         [Archived] 
-          <br/> I compiled a list for an interview on how my current projects align with the Mable's requirements and, some notes on Mable's website
+          <br/> I compiled a list for an interview on how my current projects align with Mable's requirements and, some notes on Mable's website
       </h4>
       <div className="mt-6 gap-4 sm:grid-cols-2">
         <div className="bg-white p-4 rounded-lg shadow-md">
