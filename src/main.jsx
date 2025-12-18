@@ -8,8 +8,8 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ThemeProvider>
-      <Toaster />
-      <App />
+    <Toaster />
+    <App />
     </ThemeProvider>
   </StrictMode>,
 );

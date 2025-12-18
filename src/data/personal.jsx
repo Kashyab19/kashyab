@@ -147,5 +147,14 @@ export const podcasts = [
   },
 ];
 
-export const podcastsUpdatedOn = "2025-11-25";
+export const podcastsUpdatedOn = "2025-12-18";
+
+// People you look up to (fill this list in over time)
+export const people = [
+  // Example:
+  { name: "Murali Seshadri", reason: "25 years of building a great small business" },
+  { name: "Charlie Munger", reason: "Mental models, clear thinking, long-termism." },
+  { name: "Naval Ravikant", reason: "Building a company that lasts" },
+  { name: "David Senra", reason: "Storytelling and compounded my learning speed" },
+];
 
