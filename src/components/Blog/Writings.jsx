@@ -34,14 +34,14 @@ function Writings() {
         <p className="text-body">No posts yet. I mean I am writing them as we speak!</p>
       ) : (
         <ul className="writings-list">
-          {posts.map((post) => (
+              {posts.map((post) => (
             <li key={post.slug} className="writings-item">
               <span className="writings-date">{formatDate(post.date)}</span>
               <Link to={`/${post.slug}`} className="writings-title">
-                {post.title}
-              </Link>
+                      {post.title}
+                    </Link>
             </li>
-          ))}
+                        ))}
         </ul>
       )}
     </main>
