@@ -26,6 +26,17 @@ const socialIcons = {
       <path d="M18.244 2.25H21.25L14.48 10.02L22.446 21.75H15.99L11.094 14.69L5.493 21.75H2.485L9.754 13.38L2.145 2.25H8.75L13.17 8.64L18.244 2.25ZM17.12 19.68H18.9L7.56 4.22H5.65L17.12 19.68Z" fill="currentColor" />
     </svg>
   ),
+  base: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="5" y="5" width="14" height="14" rx="2.5" fill="currentColor" />
+    </svg>
+  ),
+  email: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" fill="currentColor"/>
+      <path d="M22 6L12 13L2 6" fill="currentColor" opacity="0.3"/>
+    </svg>
+  ),
 };
 
 export const socialLinks = [
@@ -48,6 +59,11 @@ export const socialLinks = [
     name: "Twitter",
     url: "https://x.com/karpathism",
     icon: socialIcons.twitter,
+  },
+  {
+    name: "The Base App",
+    url: "https://base.app/profile/0xFEfEDe657013F9B9B7d6259CC346BF9C4D4864A0?tab=posts",
+    icon: socialIcons.base,
   },
 ];
 
