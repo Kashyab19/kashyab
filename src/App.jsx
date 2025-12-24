@@ -1,9 +1,29 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, NavLink } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
 import "./App.css";
 import profileImage from "./assets/kashyab-murali.jpg";
 import { socialLinks, personalInfo, works, projects, beliefs, navLinks } from "./data/personal.jsx";
+
+// Import social icons for footer
+const socialIcons = {
+  email: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" fill="currentColor"/>
+      <path d="M22 6L12 13L2 6" fill="currentColor" opacity="0.3"/>
+    </svg>
+  ),
+  twitter: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M18.244 2.25H21.25L14.48 10.02L22.446 21.75H15.99L11.094 14.69L5.493 21.75H2.485L9.754 13.38L2.145 2.25H8.75L13.17 8.64L18.244 2.25ZM17.12 19.68H18.9L7.56 4.22H5.65L17.12 19.68Z" fill="currentColor" />
+    </svg>
+  ),
+  github: (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path fillRule="evenodd" clipRule="evenodd" d="M12 1.5C6.201 1.5 1.5 6.201 1.5 12C1.5 16.623 4.487 20.536 8.624 21.977C9.124 22.066 9.309 21.756 9.309 21.484C9.309 21.242 9.3 20.579 9.295 19.763C6.766 20.313 6.182 18.615 6.182 18.615C5.73 17.461 5.053 17.151 5.053 17.151C4.087 16.495 5.126 16.509 5.126 16.509C6.193 16.584 6.755 17.605 6.755 17.605C7.707 19.229 9.272 18.758 9.892 18.5C9.981 17.834 10.244 17.383 10.535 17.135C8.418 16.885 6.2 16.084 6.2 12.493C6.2 11.47 6.564 10.62 7.178 9.94C7.081 9.69 6.767 8.694 7.27 7.408C7.27 7.408 8.069 7.142 9.287 8.057C10.043 7.846 10.856 7.74 11.668 7.736C12.48 7.74 13.294 7.846 14.051 8.057C15.268 7.142 16.066 7.408 16.066 7.408C16.57 8.694 16.255 9.69 16.158 9.94C16.774 10.62 17.136 11.47 17.136 12.493C17.136 16.094 14.915 16.883 12.792 17.129C13.143 17.428 13.452 18.02 13.452 18.92C13.452 20.213 13.439 21.17 13.439 21.484C13.439 21.758 13.62 22.07 14.129 21.976C18.265 20.534 21.25 16.622 21.25 12C21.25 6.201 16.549 1.5 10.75 1.5H12Z" fill="currentColor" />
+    </svg>
+  ),
+};
 import { useTheme } from "./contexts/ThemeContext";
 import { useSEO } from "./hooks/useSEO";
 
@@ -20,38 +40,109 @@ function Header() {
   
   return (
     <header className="site-header">
-      <nav className="socials" aria-label="social links">
-        {socialLinks.map((link) => (
-          <a
-            key={link.name}
-            className="icon-link"
-            href={link.url}
-            target="_blank"
-            rel="noreferrer"
-            aria-label={link.name}
+      <nav className="header-nav" aria-label="main navigation">
+        <div className="header-links">
+          <NavLink to="/writings" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>Writings</NavLink>
+          <NavLink to="/influence" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>Influence</NavLink>
+          <button
+            className="theme-toggle"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+            title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
           >
-            {link.icon}
-          </a>
-        ))}
-        <button
-          className="theme-toggle"
-          onClick={toggleTheme}
-          aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-          title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-        >
-          {theme === "light" ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          ) : (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          )}
-        </button>
+            {theme === "light" ? (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            ) : (
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            )}
+          </button>
+        </div>
       </nav>
     </header>
+  );
+}
+
+function Footer() {
+  // Map navLinks to icons
+  const getIconForNavLink = (label) => {
+    const labelLower = label.toLowerCase();
+    if (labelLower === 'email') return socialIcons.email;
+    if (labelLower === 'twitter') return socialIcons.twitter;
+    if (labelLower === 'github') return socialIcons.github;
+    return null;
+  };
+
+  // Combine navLinks and socialLinks, filtering duplicates
+  const navLinkLabels = navLinks.map(link => link.label.toLowerCase());
+  const uniqueSocialLinks = socialLinks.filter(
+    link => !navLinkLabels.includes(link.name.toLowerCase())
+  );
+
+  // Combine all links for desktop (all as text)
+  const allFooterLinks = [
+    ...navLinks,
+    ...uniqueSocialLinks.map(link => ({
+      label: link.name,
+      url: link.url,
+      isSocial: true
+    }))
+  ];
+
+  // All links with icons for mobile
+  const allFooterLinksWithIcons = [
+    ...navLinks.map(link => ({
+      label: link.label,
+      url: link.url,
+      icon: getIconForNavLink(link.label),
+      name: link.label
+    })),
+    ...uniqueSocialLinks.map(link => ({
+      label: link.name,
+      url: link.url,
+      icon: link.icon,
+      name: link.name
+    }))
+  ];
+
+  return (
+    <footer className="site-footer">
+      <nav className="footer-nav" aria-label="footer links">
+        {/* Desktop: All as text links */}
+        <div className="footer-text-links">
+          {allFooterLinks.map((link, index) => (
+            <a
+              key={link.label || link.name || index}
+              href={link.url}
+              target={link.url.startsWith("http") || link.url.startsWith("mailto") ? "_blank" : undefined}
+              rel={link.url.startsWith("http") ? "noreferrer" : undefined}
+              className={`footer-link ${link.isSocial ? 'footer-social-link' : ''}`}
+            >
+              {link.label || link.name}
+            </a>
+          ))}
+        </div>
+        {/* Mobile: All links as icons */}
+        <div className="footer-social-icons">
+          {allFooterLinksWithIcons.map((link) => (
+            <a
+              key={link.name || link.label}
+              className="icon-link"
+              href={link.url}
+              target={link.url.startsWith("http") || link.url.startsWith("mailto") ? "_blank" : undefined}
+              rel={link.url.startsWith("http") ? "noreferrer" : undefined}
+              aria-label={link.name || link.label}
+            >
+              {link.icon}
+            </a>
+          ))}
+        </div>
+      </nav>
+    </footer>
   );
 }
 
@@ -110,21 +201,6 @@ function Home() {
           ))}
         </ul>
       </section>
-
-      <nav className="nav-links">
-        <Link to="/writings">Writings</Link>
-        <Link to="/influence">Influence</Link>
-        {navLinks.map((link) => (
-          <a
-            key={link.label}
-            href={link.url}
-            target={link.url.startsWith("http") ? "_blank" : undefined}
-            rel={link.url.startsWith("http") ? "noreferrer" : undefined}
-          >
-            {link.label}
-          </a>
-        ))}
-      </nav>
     </main>
   );
 }
@@ -169,6 +245,7 @@ export default function App() {
             }
           />
         </Routes>
+        <Footer />
         <Analytics />
         <Suspense fallback={null}>
           <SpeedInsights />
