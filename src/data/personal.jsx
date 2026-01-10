@@ -71,7 +71,7 @@ export const personalInfo = {
   name: "Kashyab",
   heading: "Hi, I am Kashyab!",
   bio: "I study systems. Whether it is history, economics, or computer science, I am obsessed with how complex parts fit together to function as a whole. I take this understanding of broad mechanics and apply it to backend engineering. I do not just write code. I build infrastructure that supports real business needs. When I am not shipping software, I am writing about the intersection of technology and the economy or doing deadlifts.",
-  current: "Current: Looking for a Engineering Challenge (aka full time job). Open to relocating anywhere in the USA.",
+  current: "Full Stack Engineer • Specialized in High-Availability Web Apps • Immediate Availability for USA Remote or Relocation",
 };
 
 export const works = [
@@ -180,14 +180,16 @@ export const videos = [
     youtubeId: "CmIjUL-AmjY",
     year: 2025,
     tags: ["fun"],
-    description: "Cmd + F for videos. Building using CLIP by OpenAI, Redpanda and Qdrant DB"
+    description: "Cmd + F for videos. Building using CLIP by OpenAI, Redpanda and Qdrant DB",
+    github: "https://github.com/Kashyab19/semantic-cuts"
   },
   {
     title:"Cache Flow",
     youtubeId: "68Swoa0HFlk",
     year: 2025,
     tags: ["fun"],
-    description: "Stop calling LLM APIs everytime. Build a simple caching layer for LLM responses using vector embeddings and Qdrant"
+    description: "Stop calling LLM APIs everytime. Build a simple caching layer for LLM responses using vector embeddings and Qdrant",
+    github: "https://github.com/Kashyab19/cache-flow",
   },
   {
     title:"Google Calendar MCP",
@@ -197,11 +199,20 @@ export const videos = [
     description: "Build a Google Calendar MCP using Google Calendar API and Google Apps Script"
   },
   {
+    title:"Rethinking AI Agents' Dashboard",
+    youtubeId: "_a6hYZLR0vg",
+    year: 2025,
+    tags: ["demo"],
+    description: "Rethinking AI Agents' Dashboard for Subsconscious.dev",
+    github: "https://github.com/Kashyab19/subnet-fork",
+  },
+  {
     title:"Morpho Dashboard",
     youtubeId: "4jq_akXQQf8",
     year: 2025,
     tags: ["demo"],
     description: "Visualize your positions in Morpho Markets in real time", 
+    github: "https://github.com/Kashyab19/polylend",
   }
 ];
 

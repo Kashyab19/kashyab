@@ -170,9 +170,11 @@ function Home() {
 
       <p className="text-body">{personalInfo.bio}</p>
 
-      <p className="text-body-bold">
-        {personalInfo.current}
-      </p>
+      <div className="current-highlight">
+        <p className="text-body-bold">
+          {personalInfo.current}
+        </p>
+      </div>
 
       <section className="section-item">
         <h2 className="section-title">Works</h2>

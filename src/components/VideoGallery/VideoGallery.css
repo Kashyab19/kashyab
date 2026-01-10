@@ -65,9 +65,16 @@
 .video-card-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
   gap: 16px;
   margin-bottom: 12px;
+}
+
+.video-card-header-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
 }
 
 .video-card-title {
@@ -91,6 +98,10 @@
   border-radius: 6px;
   flex-shrink: 0;
   transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.video-card-youtube-link svg {
+  display: block;
 }
 
 .video-card-youtube-link:hover {
@@ -136,9 +147,8 @@
 
 .video-card-footer {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
   flex-wrap: wrap;
 }
 
@@ -160,49 +170,29 @@
   transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
-.video-card-links {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
 .video-card-github-link {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 14px;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
   color: var(--text-secondary);
   text-decoration: none;
-  padding: 6px 10px;
   border: 1px solid var(--border-color);
   border-radius: 6px;
+  flex-shrink: 0;
   transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.video-card-github-link svg {
+  display: block;
+  flex-shrink: 0;
 }
 
 .video-card-github-link:hover {
   color: var(--link-color);
   border-color: var(--link-color);
   background-color: var(--bg-secondary);
-}
-
-.video-card-github-link svg {
-  flex-shrink: 0;
-}
-
-.video-card-github-text {
-  font-size: 14px;
-  font-weight: 500;
-  white-space: nowrap;
-}
-
-.video-card-year {
-  font-size: 14px;
-  color: var(--text-tertiary);
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-  transition: color 0.2s ease;
 }
 
 @media (max-width: 768px) {
@@ -242,26 +232,10 @@
   }
 
   .video-card-footer {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 12px;
+    gap: 8px;
   }
 
-  .video-card-links {
-    width: 100%;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .video-card-github-link {
-    padding: 6px 10px;
-  }
-
-  .video-card-github-text {
-    font-size: 13px;
-  }
-
-  .video-card-year {
-    font-size: 13px;
+  .video-card-header-links {
+    gap: 6px;
   }
 }
