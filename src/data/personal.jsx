@@ -174,3 +174,34 @@ export const people = [
   { name: "David Senra", reason: "Storytelling and compounded my learning speed" },
 ];
 
+export const videos = [
+  {
+    title: "Semantic Cuts",
+    youtubeId: "CmIjUL-AmjY",
+    year: 2025,
+    tags: ["fun"],
+    description: "Cmd + F for videos. Building using CLIP by OpenAI, Redpanda and Qdrant DB"
+  },
+  {
+    title:"Cache Flow",
+    youtubeId: "68Swoa0HFlk",
+    year: 2025,
+    tags: ["fun"],
+    description: "Stop calling LLM APIs everytime. Build a simple caching layer for LLM responses using vector embeddings and Qdrant"
+  },
+  {
+    title:"Google Calendar MCP",
+    youtubeId: "tm5USEgM6y4",
+    year: 2025,
+    tags: ["demo"],
+    description: "Build a Google Calendar MCP using Google Calendar API and Google Apps Script"
+  },
+  {
+    title:"Morpho Dashboard",
+    youtubeId: "4jq_akXQQf8",
+    year: 2025,
+    tags: ["demo"],
+    description: "Visualize your positions in Morpho Markets in real time", 
+  }
+];
+
