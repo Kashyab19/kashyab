@@ -34,6 +34,10 @@ const MableResources = lazy(() => import("./components/Library/MableResources"))
 const Writings = lazy(() => import("./components/Blog/Writings"));
 const Post = lazy(() => import("./components/Blog/Post"));
 const Influence = lazy(() => import("./components/Influence/Influence"));
+const VideoGallery = lazy(() => import("./components/VideoGallery/VideoGallery"));
+
+// Feature flag check - defaults to false if not set
+const isVideoGalleryEnabled = import.meta.env.VITE_ENABLE_VIDEO_GALLERY === "true";
 
 function Header() {
   const { theme, toggleTheme } = useTheme();
@@ -44,6 +48,9 @@ function Header() {
         <div className="header-links">
           <NavLink to="/writings" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>Writings</NavLink>
           <NavLink to="/influence" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>Influence</NavLink>
+          {isVideoGalleryEnabled && (
+            <NavLink to="/videos" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>Videos</NavLink>
+          )}
           <button
             className="theme-toggle"
             onClick={toggleTheme}
@@ -163,9 +170,11 @@ function Home() {
 
       <p className="text-body">{personalInfo.bio}</p>
 
-      <p className="text-body-bold">
-        {personalInfo.current}
-      </p>
+      <div className="current-highlight">
+        <p className="text-body-bold">
+          {personalInfo.current}
+        </p>
+      </div>
 
       <section className="section-item">
         <h2 className="section-title">Works</h2>
@@ -179,7 +188,14 @@ function Home() {
       </section>
 
       <section className="section-item">
-        <h2 className="section-title">Projects</h2>
+        <div className="section-header">
+          <h2 className="section-title">Projects</h2>
+          {isVideoGalleryEnabled && (
+            <Link to="/videos" className="section-link">
+              Videos →
+            </Link>
+          )}
+        </div>
         <ul className="section-list">
           {projects.map((project, index) => (
             <li key={index}>
@@ -236,6 +252,16 @@ export default function App() {
               </Suspense>
             }
           />
+          {isVideoGalleryEnabled && (
+            <Route
+              path="/videos"
+              element={
+                <Suspense fallback={<div />}>
+                  <VideoGallery />
+                </Suspense>
+              }
+            />
+          )}
           <Route
             path="/:slug"
             element={

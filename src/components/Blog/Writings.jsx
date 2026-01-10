@@ -30,18 +30,25 @@ function Writings() {
       </div>
       <h2 className="page-heading">Writings</h2>
       
+      <p className="text-body">
+        Thoughts on systems, technology, and the intersection of engineering and economics.
+      </p>
+
       {posts.length === 0 ? (
         <p className="text-body">No posts yet. I mean I am writing them as we speak!</p>
       ) : (
         <ul className="writings-list">
-              {posts.map((post) => (
-            <li key={post.slug} className="writings-item">
-              <span className="writings-date">{formatDate(post.date)}</span>
-              <Link to={`/${post.slug}`} className="writings-title">
-                      {post.title}
-                    </Link>
-            </li>
-                        ))}
+          {posts.map((post) => {
+            const formattedDate = formatDate(post.date);
+            return (
+              <li key={post.slug} className="writings-item">
+                <span className="writings-date">{formattedDate || "—"}</span>
+                <Link to={`/${post.slug}`} className="writings-title">
+                  {post.title}
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
     </main>
