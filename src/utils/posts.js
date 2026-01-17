@@ -51,10 +51,17 @@ export function getAllPosts() {
     };
   });
   
-  // Sort by date (newest first)
+  // Sort by date (newest first), posts without dates go to the end
   return posts.sort((a, b) => {
-    if (!a.date || !b.date) return 0;
-    return new Date(b.date) - new Date(a.date);
+    // If both have dates, sort by date (newest first)
+    if (a.date && b.date) {
+      return new Date(b.date) - new Date(a.date);
+    }
+    // Posts without dates go to the end
+    if (!a.date && b.date) return 1;
+    if (a.date && !b.date) return -1;
+    // If neither has a date, maintain original order
+    return 0;
   });
 }
 
