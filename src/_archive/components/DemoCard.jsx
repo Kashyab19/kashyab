@@ -6,7 +6,7 @@ const DemoCard = () => {
 
     useEffect(() => {
         // Replace this URL with your Substack RSS feed URL
-        const substackRSSUrl = 'https://kashyabnarrates.substack.com/feed';
+        const substackRSSUrl = 'https://thefirstderivative.substack.com/feed';
         
         fetch(substackRSSUrl)
             .then(response => response.text())
