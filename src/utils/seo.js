@@ -67,7 +67,7 @@ export function generateStructuredData({ type, title, description, datePublished
       "https://www.linkedin.com/in/kashyab-murali/",
       "https://github.com/Kashyab19",
       "https://x.com/karpathism",
-      "https://kashyabnarrates.substack.com/",
+      "https://thefirstderivative.substack.com/",
     ],
   };
 

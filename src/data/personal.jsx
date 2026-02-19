@@ -52,7 +52,7 @@ export const socialLinks = [
   },
   {
     name: "Substack",
-    url: "https://kashyabnarrates.substack.com/",
+    url: "https://thefirstderivative.substack.com/",
     icon: socialIcons.substack,
   },
   {
@@ -92,7 +92,7 @@ export const works = [
   },
   {
     title: "Thinking and writing about how systems work?",
-    url: "https://kashyabnarrates.substack.com/",
+    url: "https://thefirstderivative.substack.com/",
     description: "Wrote nearly 10+ system design topics on my Substack. Grew it 1500 views and 35 subscribers.",
   },
 ];
