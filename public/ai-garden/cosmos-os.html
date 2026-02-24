@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CosmOS</title>
+<style>
+:root {
+  --glass: rgba(20,20,35,0.75);
+  --glass-border: rgba(255,255,255,0.08);
+  --accent: #7b8cff;
+  --accent2: #ff7bab;
+  --text: #ccc;
+  --text-dim: rgba(255,255,255,0.35);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#08080f; font-family:'Segoe UI',system-ui,sans-serif; color:var(--text); overflow:hidden; height:100vh; }
+
+/* === Wallpaper === */
+#wallpaper { position:fixed; inset:0; z-index:0; }
+
+/* === Desktop Icons === */
+#desktop {
+  position:fixed; inset:0; z-index:1;
+  padding:20px; display:flex; flex-direction:column; flex-wrap:wrap; align-content:flex-start; gap:10px;
+}
+.icon {
+  width:80px; height:85px; display:flex; flex-direction:column; align-items:center;
+  justify-content:center; gap:6px; border-radius:10px; cursor:pointer;
+  transition: background 0.15s;
+}
+.icon:hover { background:rgba(255,255,255,0.08); }
+.icon-img { font-size:36px; line-height:1; }
+.icon-label { font-size:11px; color:rgba(255,255,255,0.7); text-align:center; text-shadow:0 1px 3px rgba(0,0,0,0.8); }
+
+/* === Taskbar === */
+#taskbar {
+  position:fixed; bottom:0; left:0; right:0; height:48px; z-index:1000;
+  background:rgba(10,10,20,0.85); backdrop-filter:blur(20px);
+  border-top:1px solid var(--glass-border);
+  display:flex; align-items:center; padding:0 16px; gap:6px;
+}
+#start-btn {
+  width:36px; height:36px; border-radius:8px; border:none;
+  background:linear-gradient(135deg, var(--accent), var(--accent2));
+  cursor:pointer; font-size:18px; color:#fff; display:grid; place-items:center;
+}
+.task-item {
+  padding:6px 14px; font-size:12px; border-radius:6px; cursor:pointer;
+  background:rgba(255,255,255,0.06); border:1px solid transparent;
+  color:var(--text-dim); transition:all 0.15s;
+}
+.task-item.active { border-color:var(--accent); color:#fff; background:rgba(123,140,255,0.12); }
+#clock {
+  margin-left:auto; font-size:12px; color:var(--text-dim);
+  display:flex; align-items:center; gap:12px;
+}
+
+/* === Windows === */
+.window {
+  position:absolute; min-width:300px; min-height:200px;
+  background:var(--glass); backdrop-filter:blur(24px);
+  border:1px solid var(--glass-border); border-radius:12px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.5); overflow:hidden;
+  display:flex; flex-direction:column;
+}
+.window.maximized { border-radius:0; }
+.win-header {
+  height:38px; display:flex; align-items:center; padding:0 12px;
+  background:rgba(255,255,255,0.03); cursor:grab; flex-shrink:0;
+  border-bottom:1px solid var(--glass-border);
+}
+.win-header:active { cursor:grabbing; }
+.win-title { font-size:12px; color:rgba(255,255,255,0.6); flex:1; pointer-events:none; }
+.win-btns { display:flex; gap:8px; }
+.win-btn {
+  width:14px; height:14px; border-radius:50%; border:none; cursor:pointer;
+  transition: opacity 0.15s;
+}
+.win-close { background:#ff5f57; }
+.win-min { background:#febc2e; }
+.win-max { background:#28c840; }
+.win-body { flex:1; overflow:auto; position:relative; }
+
+/* === App: Terminal === */
+.terminal { background:#0a0a12; padding:12px; font-family:'Courier New',monospace; font-size:13px; height:100%; display:flex; flex-direction:column; }
+.term-output { flex:1; overflow-y:auto; white-space:pre-wrap; word-break:break-all; color:#0f0; line-height:1.5; }
+.term-input-row { display:flex; align-items:center; color:#0f0; }
+.term-prompt { margin-right:6px; }
+.term-input { flex:1; background:none; border:none; outline:none; color:#0f0; font-family:inherit; font-size:inherit; }
+
+/* === App: Paint === */
+.paint-toolbar { display:flex; gap:4px; padding:6px 8px; background:rgba(0,0,0,0.2); flex-shrink:0; flex-wrap:wrap; align-items:center; }
+.color-btn { width:22px; height:22px; border-radius:4px; border:2px solid transparent; cursor:pointer; }
+.color-btn.active { border-color:#fff; }
+.size-btn { padding:2px 8px; font-size:11px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.05); color:#aaa; border-radius:4px; cursor:pointer; }
+.size-btn.active { border-color:var(--accent); color:#fff; }
+.paint-canvas { background:#1a1a24; cursor:crosshair; display:block; }
+
+/* === App: Notes === */
+.notes-app { display:flex; height:100%; }
+.notes-sidebar { width:120px; background:rgba(0,0,0,0.2); border-right:1px solid var(--glass-border); padding:8px; display:flex; flex-direction:column; gap:4px; }
+.note-item { padding:6px 8px; font-size:11px; border-radius:4px; cursor:pointer; color:var(--text-dim); }
+.note-item:hover, .note-item.active { background:rgba(255,255,255,0.06); color:#fff; }
+.note-add { padding:4px; text-align:center; font-size:18px; cursor:pointer; color:var(--text-dim); border-radius:4px; }
+.note-add:hover { background:rgba(255,255,255,0.06); }
+.note-editor { flex:1; }
+.note-editor textarea { width:100%; height:100%; background:transparent; border:none; outline:none; color:var(--text); padding:12px; font-size:13px; font-family:inherit; resize:none; }
+
+/* === App: Weather === */
+.weather-app { padding:24px; text-align:center; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; }
+.weather-icon { font-size:72px; margin-bottom:12px; }
+.weather-temp { font-size:48px; font-weight:200; margin-bottom:4px; }
+.weather-desc { color:var(--text-dim); font-size:14px; margin-bottom:20px; }
+.weather-details { display:flex; gap:30px; color:var(--text-dim); font-size:12px; }
+.weather-detail span { display:block; font-size:18px; color:var(--text); margin-top:4px; }
+
+/* === App: Music Visualizer === */
+.music-app { height:100%; display:flex; flex-direction:column; }
+.music-canvas { flex:1; background:#0a0a12; }
+.music-controls { padding:10px; background:rgba(0,0,0,0.3); display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.music-btn { width:32px; height:32px; border-radius:50%; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.05); color:#fff; cursor:pointer; display:grid; place-items:center; font-size:14px; }
+.music-track { flex:1; font-size:12px; color:var(--text-dim); }
+.music-bar { width:100%; height:4px; background:rgba(255,255,255,0.08); border-radius:2px; margin-top:4px; overflow:hidden; }
+.music-progress { height:100%; background:var(--accent); border-radius:2px; transition: width 0.3s; }
+
+/* === App: System Monitor === */
+.sysmon { padding:16px; height:100%; display:flex; flex-direction:column; gap:12px; }
+.sysmon-row { display:flex; align-items:center; gap:10px; }
+.sysmon-label { font-size:11px; color:var(--text-dim); width:60px; text-transform:uppercase; letter-spacing:1px; }
+.sysmon-bar-bg { flex:1; height:8px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; }
+.sysmon-bar { height:100%; border-radius:4px; transition:width 0.5s; }
+.sysmon-val { font-size:12px; width:45px; text-align:right; }
+.sysmon-chart { flex:1; position:relative; }
+.sysmon-chart canvas { width:100%; height:100%; }
+
+/* === App: Calculator === */
+.calc { padding:12px; height:100%; display:flex; flex-direction:column; }
+.calc-display { background:rgba(0,0,0,0.3); border-radius:8px; padding:12px 16px; margin-bottom:10px; text-align:right; min-height:60px; display:flex; flex-direction:column; justify-content:flex-end; }
+.calc-expr { font-size:12px; color:var(--text-dim); min-height:16px; }
+.calc-result { font-size:28px; font-weight:300; }
+.calc-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; flex:1; }
+.calc-btn {
+  border:none; border-radius:8px; font-size:16px; cursor:pointer;
+  background:rgba(255,255,255,0.06); color:var(--text); transition:background 0.1s;
+  display:grid; place-items:center;
+}
+.calc-btn:hover { background:rgba(255,255,255,0.12); }
+.calc-btn.op { background:rgba(123,140,255,0.15); color:var(--accent); }
+.calc-btn.op:hover { background:rgba(123,140,255,0.25); }
+.calc-btn.eq { background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff; }
+
+/* === Start Menu === */
+#start-menu {
+  position:fixed; bottom:56px; left:8px; width:280px;
+  background:rgba(15,15,28,0.92); backdrop-filter:blur(30px);
+  border:1px solid var(--glass-border); border-radius:12px;
+  padding:12px; z-index:999; display:none;
+  box-shadow:0 15px 50px rgba(0,0,0,0.6);
+}
+#start-menu.open { display:block; }
+.start-item {
+  display:flex; align-items:center; gap:10px; padding:10px 12px;
+  border-radius:8px; cursor:pointer; transition:background 0.12s;
+}
+.start-item:hover { background:rgba(255,255,255,0.06); }
+.start-item .si-icon { font-size:22px; width:32px; text-align:center; }
+.start-item .si-label { font-size:13px; }
+.start-divider { height:1px; background:var(--glass-border); margin:8px 0; }
+</style>
+</head>
+<body>
+
+<canvas id="wallpaper"></canvas>
+<div id="desktop"></div>
+
+<div id="start-menu"></div>
+
+<div id="taskbar">
+  <button id="start-btn">&#9672;</button>
+  <div id="task-items"></div>
+  <div id="clock"></div>
+</div>
+
+<script>
+// ============================================
+// WALLPAPER - Animated starfield + nebula
+// ============================================
+const wp = document.getElementById('wallpaper');
+const wpCtx = wp.getContext('2d');
+let wpW, wpH;
+const stars = [];
+
+function resizeWP() {
+  wpW = wp.width = innerWidth;
+  wpH = wp.height = innerHeight;
+  if (!stars.length) for (let i = 0; i < 300; i++) stars.push({
+    x: Math.random() * wpW, y: Math.random() * wpH,
+    r: Math.random() * 1.5 + 0.3, speed: Math.random() * 0.3 + 0.05,
+    twinkle: Math.random() * Math.PI * 2
+  });
+}
+resizeWP();
+window.addEventListener('resize', resizeWP);
+
+function drawWallpaper(t) {
+  wpCtx.fillStyle = '#08080f';
+  wpCtx.fillRect(0, 0, wpW, wpH);
+
+  // Nebula
+  const grd = wpCtx.createRadialGradient(wpW*0.3, wpH*0.4, 50, wpW*0.3, wpH*0.4, wpW*0.5);
+  grd.addColorStop(0, 'rgba(60,20,120,0.12)');
+  grd.addColorStop(0.5, 'rgba(20,40,100,0.06)');
+  grd.addColorStop(1, 'transparent');
+  wpCtx.fillStyle = grd;
+  wpCtx.fillRect(0, 0, wpW, wpH);
+
+  const grd2 = wpCtx.createRadialGradient(wpW*0.75, wpH*0.6, 30, wpW*0.75, wpH*0.6, wpW*0.4);
+  grd2.addColorStop(0, 'rgba(120,30,80,0.1)');
+  grd2.addColorStop(1, 'transparent');
+  wpCtx.fillStyle = grd2;
+  wpCtx.fillRect(0, 0, wpW, wpH);
+
+  // Stars
+  stars.forEach(s => {
+    const a = 0.4 + Math.sin(t * 0.001 + s.twinkle) * 0.3;
+    wpCtx.fillStyle = `rgba(255,255,255,${a})`;
+    wpCtx.beginPath();
+    wpCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    wpCtx.fill();
+    s.y += s.speed;
+    if (s.y > wpH + 5) { s.y = -5; s.x = Math.random() * wpW; }
+  });
+}
+
+// ============================================
+// WINDOW MANAGER
+// ============================================
+const windows = {};
+let winZ = 100;
+let dragWin = null, dragOX, dragOY;
+let resizeWin = null;
+
+function createWindow(id, title, width, height, bodyHTML, opts = {}) {
+  if (windows[id]) { focusWindow(id); return; }
+
+  const x = 60 + Object.keys(windows).length * 30 + Math.random() * 80;
+  const y = 40 + Object.keys(windows).length * 25 + Math.random() * 40;
+
+  const win = document.createElement('div');
+  win.className = 'window';
+  win.id = 'win-' + id;
+  win.style.cssText = `left:${x}px;top:${y}px;width:${width}px;height:${height}px;z-index:${++winZ}`;
+
+  win.innerHTML = `
+    <div class="win-header">
+      <span class="win-title">${opts.icon || ''} ${title}</span>
+      <div class="win-btns">
+        <button class="win-btn win-min" title="Minimize"></button>
+        <button class="win-btn win-max" title="Maximize"></button>
+        <button class="win-btn win-close" title="Close"></button>
+      </div>
+    </div>
+    <div class="win-body">${bodyHTML}</div>
+  `;
+
+  document.body.appendChild(win);
+
+  // Drag
+  const header = win.querySelector('.win-header');
+  header.addEventListener('mousedown', e => {
+    if (e.target.classList.contains('win-btn')) return;
+    dragWin = win;
+    const rect = win.getBoundingClientRect();
+    dragOX = e.clientX - rect.left;
+    dragOY = e.clientY - rect.top;
+    win.style.zIndex = ++winZ;
+  });
+
+  // Buttons
+  win.querySelector('.win-close').onclick = () => closeWindow(id);
+  win.querySelector('.win-min').onclick = () => minimizeWindow(id);
+  win.querySelector('.win-max').onclick = () => maximizeWindow(id);
+  win.addEventListener('mousedown', () => { win.style.zIndex = ++winZ; });
+
+  windows[id] = { el: win, title, icon: opts.icon || '', maximized: false, prevRect: null };
+  updateTaskbar();
+
+  if (opts.onInit) opts.onInit(win.querySelector('.win-body'));
+  return win;
+}
+
+function closeWindow(id) {
+  if (!windows[id]) return;
+  windows[id].el.remove();
+  delete windows[id];
+  updateTaskbar();
+}
+
+function minimizeWindow(id) {
+  if (!windows[id]) return;
+  windows[id].el.style.display = 'none';
+}
+
+function maximizeWindow(id) {
+  const w = windows[id];
+  if (!w) return;
+  if (!w.maximized) {
+    w.prevRect = { left: w.el.style.left, top: w.el.style.top, width: w.el.style.width, height: w.el.style.height };
+    w.el.style.cssText += `;left:0;top:0;width:${innerWidth}px;height:${innerHeight-48}px;border-radius:0;`;
+    w.maximized = true;
+  } else {
+    Object.assign(w.el.style, w.prevRect);
+    w.el.style.borderRadius = '12px';
+    w.maximized = false;
+  }
+  w.el.classList.toggle('maximized', w.maximized);
+}
+
+function focusWindow(id) {
+  if (!windows[id]) return;
+  windows[id].el.style.display = 'flex';
+  windows[id].el.style.zIndex = ++winZ;
+}
+
+document.addEventListener('mousemove', e => {
+  if (dragWin) {
+    dragWin.style.left = (e.clientX - dragOX) + 'px';
+    dragWin.style.top = Math.max(0, e.clientY - dragOY) + 'px';
+  }
+});
+document.addEventListener('mouseup', () => { dragWin = null; });
+
+// ============================================
+// TASKBAR
+// ============================================
+function updateTaskbar() {
+  const cont = document.getElementById('task-items');
+  cont.innerHTML = '';
+  for (const [id, w] of Object.entries(windows)) {
+    const el = document.createElement('div');
+    el.className = 'task-item active';
+    el.textContent = w.icon + ' ' + w.title;
+    el.onclick = () => focusWindow(id);
+    cont.appendChild(el);
+  }
+}
+
+function updateClock() {
+  const now = new Date();
+  const h = now.getHours().toString().padStart(2, '0');
+  const m = now.getMinutes().toString().padStart(2, '0');
+  const date = now.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  document.getElementById('clock').textContent = `${date}  ${h}:${m}`;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ============================================
+// DESKTOP ICONS
+// ============================================
+const apps = [
+  { id:'terminal', icon:'>', label:'Terminal', app: openTerminal },
+  { id:'paint', icon:'~', label:'Paint', app: openPaint },
+  { id:'notes', icon:'=', label:'Notes', app: openNotes },
+  { id:'calc', icon:'#', label:'Calc', app: openCalc },
+  { id:'weather', icon:'*', label:'Weather', app: openWeather },
+  { id:'sysmon', icon:'%', label:'System', app: openSysMon },
+  { id:'music', icon:'|', label:'Music Viz', app: openMusic },
+];
+
+const desktop = document.getElementById('desktop');
+apps.forEach(a => {
+  const el = document.createElement('div');
+  el.className = 'icon';
+  el.innerHTML = `<div class="icon-img">${a.icon}</div><div class="icon-label">${a.label}</div>`;
+  el.ondblclick = a.app;
+  desktop.appendChild(el);
+});
+
+// Start menu
+const startMenu = document.getElementById('start-menu');
+startMenu.innerHTML = apps.map(a =>
+  `<div class="start-item" data-app="${a.id}"><div class="si-icon">${a.icon}</div><div class="si-label">${a.label}</div></div>`
+).join('') + `<div class="start-divider"></div><div class="start-item" onclick="document.body.innerHTML='<div style=\\'display:grid;place-items:center;height:100vh;background:#000;color:#555;font-size:24px;font-family:sans-serif\\'>CosmOS shut down.</div>'"><div class="si-icon">O</div><div class="si-label">Shut Down</div></div>`;
+
+startMenu.querySelectorAll('[data-app]').forEach(el => {
+  el.onclick = () => { apps.find(a => a.id === el.dataset.app).app(); startMenu.classList.remove('open'); };
+});
+
+document.getElementById('start-btn').onclick = () => startMenu.classList.toggle('open');
+document.addEventListener('click', e => {
+  if (!e.target.closest('#start-menu') && !e.target.closest('#start-btn')) startMenu.classList.remove('open');
+});
+
+// ============================================
+// APP: TERMINAL
+// ============================================
+function openTerminal() {
+  const html = `<div class="terminal"><div class="term-output">CosmOS Terminal v1.0\nType "help" for commands.\n\n</div><div class="term-input-row"><span class="term-prompt">cosm $</span><input class="term-input" autofocus spellcheck="false"></div></div>`;
+  createWindow('terminal', 'Terminal', 520, 360, html, {
+    icon: '>',
+    onInit(body) {
+      const output = body.querySelector('.term-output');
+      const input = body.querySelector('.term-input');
+      const fs = {
+        'readme.txt': 'Welcome to CosmOS! A tiny desktop environment built entirely in one HTML file.',
+        'secret.txt': 'The universe is not only queerer than we suppose, but queerer than we can suppose. - J.B.S. Haldane',
+        'todo.txt': '1. Explore the cosmos\n2. Paint something beautiful\n3. Calculate the meaning of life',
+      };
+      let cwd = '~';
+      const history = [];
+      let histIdx = -1;
+
+      const commands = {
+        help: () => 'Available commands:\n  help     - Show this message\n  ls       - List files\n  cat FILE - Read a file\n  echo MSG - Print message\n  date     - Show date/time\n  whoami   - Current user\n  clear    - Clear screen\n  cowsay   - A wise cow speaks\n  matrix   - Enter the matrix\n  fortune  - Random fortune\n  neofetch - System info\n  colors   - Show terminal colors',
+        ls: () => Object.keys(fs).join('  '),
+        cat: (args) => fs[args[0]] || `cat: ${args[0] || '?'}: No such file`,
+        echo: (args) => args.join(' '),
+        date: () => new Date().toString(),
+        whoami: () => 'cosmonaut',
+        clear: () => { output.textContent = ''; return ''; },
+        pwd: () => '/home/cosmonaut',
+        cowsay: (args) => {
+          const msg = args.length ? args.join(' ') : 'Moo!';
+          const line = '-'.repeat(msg.length + 2);
+          return ` ${line}\n< ${msg} >\n ${line}\n        \\   ^__^\n         \\  (oo)\\_______\n            (__)\\       )\\/\\\n                ||----w |\n                ||     ||`;
+        },
+        matrix: () => { startMatrix(output); return 'Entering the matrix...'; },
+        fortune: () => {
+          const f = [
+            'The best time to plant a tree was 20 years ago. The second best time is now.',
+            'A ship in harbor is safe, but that is not what ships are built for.',
+            'The only way to do great work is to love what you do.',
+            'In the middle of difficulty lies opportunity.',
+            'Not all those who wander are lost.',
+            '42.',
+            'Segmentation fault (core dumped)... just kidding.',
+            'Have you tried turning it off and on again?',
+          ];
+          return f[Math.floor(Math.random() * f.length)];
+        },
+        neofetch: () =>
+`   .--.      cosmonaut@cosmos
+  |o_o |     OS: CosmOS 1.0
+  |:_/ |     Host: Browser
+ //   \\ \\    Kernel: JavaScript
+(|     | )   Shell: cosm-sh
+/'\_   _/\`\\   Resolution: ${innerWidth}x${innerHeight}
+\\___)=(___/  Memory: Infinite dreams`,
+        colors: () => {
+          let s = '';
+          for (let i = 0; i < 8; i++) s += `\x1b[3${i}m`;
+          return 'Colors rendered in the terminal spirit:\n[RED] [GREEN] [YELLOW] [BLUE] [MAGENTA] [CYAN] [WHITE]';
+        },
+      };
+
+      function startMatrix(el) {
+        let count = 0;
+        const iv = setInterval(() => {
+          let line = '';
+          for (let i = 0; i < 60; i++) line += String.fromCharCode(0x30A0 + Math.random() * 96);
+          el.textContent += line + '\n';
+          el.scrollTop = el.scrollHeight;
+          if (++count > 15) clearInterval(iv);
+        }, 100);
+      }
+
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          const cmd = input.value.trim();
+          input.value = '';
+          if (!cmd) { output.textContent += `cosm $ \n`; return; }
+          history.unshift(cmd); histIdx = -1;
+          output.textContent += `cosm $ ${cmd}\n`;
+          const parts = cmd.split(/\s+/);
+          const name = parts[0].toLowerCase();
+          const args = parts.slice(1);
+          if (commands[name]) {
+            const result = commands[name](args);
+            if (result) output.textContent += result + '\n';
+          } else {
+            output.textContent += `cosm: command not found: ${name}\n`;
+          }
+          output.textContent += '\n';
+          output.scrollTop = output.scrollHeight;
+        } else if (e.key === 'ArrowUp') {
+          if (histIdx < history.length - 1) input.value = history[++histIdx];
+        } else if (e.key === 'ArrowDown') {
+          histIdx = Math.max(-1, histIdx - 1);
+          input.value = histIdx >= 0 ? history[histIdx] : '';
+        }
+      });
+      input.focus();
+    }
+  });
+}
+
+// ============================================
+// APP: PAINT
+// ============================================
+function openPaint() {
+  const colors = ['#ffffff','#ff4444','#ff8844','#ffdd44','#44ff44','#44ddff','#4488ff','#aa44ff','#ff44aa','#888888','#000000'];
+  const sizes = [2, 5, 10, 20];
+  const colorBtns = colors.map((c,i) => `<div class="color-btn${i===0?' active':''}" style="background:${c}" data-color="${c}"></div>`).join('');
+  const sizeBtns = sizes.map((s,i) => `<div class="size-btn${i===1?' active':''}" data-size="${s}">${s}px</div>`).join('');
+  const html = `<div style="display:flex;flex-direction:column;height:100%"><div class="paint-toolbar">${colorBtns}<div style="width:8px"></div>${sizeBtns}<div style="width:8px"></div><div class="size-btn" id="paint-clear">Clear</div></div><canvas class="paint-canvas"></canvas></div>`;
+
+  createWindow('paint', 'Paint', 600, 450, html, {
+    icon: '~',
+    onInit(body) {
+      const canvas = body.querySelector('.paint-canvas');
+      const ctx = canvas.getContext('2d');
+      let color = '#ffffff', size = 5, drawing = false;
+
+      function resizeCanvas() {
+        const rect = canvas.parentElement.getBoundingClientRect();
+        const toolbarH = body.querySelector('.paint-toolbar').offsetHeight;
+        canvas.width = rect.width;
+        canvas.height = rect.height - toolbarH;
+      }
+      resizeCanvas();
+      ctx.fillStyle = '#1a1a24';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      new ResizeObserver(resizeCanvas).observe(canvas.parentElement);
+
+      canvas.addEventListener('mousedown', e => { drawing = true; ctx.beginPath(); ctx.moveTo(e.offsetX, e.offsetY); });
+      canvas.addEventListener('mousemove', e => {
+        if (!drawing) return;
+        ctx.strokeStyle = color; ctx.lineWidth = size; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        ctx.lineTo(e.offsetX, e.offsetY); ctx.stroke();
+      });
+      canvas.addEventListener('mouseup', () => drawing = false);
+      canvas.addEventListener('mouseleave', () => drawing = false);
+
+      body.querySelectorAll('.color-btn').forEach(b => b.onclick = () => {
+        body.querySelectorAll('.color-btn').forEach(x => x.classList.remove('active'));
+        b.classList.add('active'); color = b.dataset.color;
+      });
+      body.querySelectorAll('.size-btn[data-size]').forEach(b => b.onclick = () => {
+        body.querySelectorAll('.size-btn[data-size]').forEach(x => x.classList.remove('active'));
+        b.classList.add('active'); size = parseInt(b.dataset.size);
+      });
+      body.querySelector('#paint-clear').onclick = () => { ctx.fillStyle = '#1a1a24'; ctx.fillRect(0, 0, canvas.width, canvas.height); };
+    }
+  });
+}
+
+// ============================================
+// APP: NOTES
+// ============================================
+function openNotes() {
+  const html = `<div class="notes-app"><div class="notes-sidebar"><div class="note-add">+</div></div><div class="note-editor"><textarea placeholder="Select or create a note..."></textarea></div></div>`;
+  createWindow('notes', 'Notes', 480, 350, html, {
+    icon: '=',
+    onInit(body) {
+      const sidebar = body.querySelector('.notes-sidebar');
+      const textarea = body.querySelector('textarea');
+      const notes = [{ title: 'Welcome', content: 'Welcome to CosmOS Notes!\n\nCreate new notes with the + button.\nYour thoughts are safe here among the stars.' }];
+      let active = 0;
+
+      function render() {
+        sidebar.querySelectorAll('.note-item').forEach(x => x.remove());
+        notes.forEach((n, i) => {
+          const el = document.createElement('div');
+          el.className = 'note-item' + (i === active ? ' active' : '');
+          el.textContent = n.title;
+          el.onclick = () => { saveActive(); active = i; render(); };
+          sidebar.appendChild(el);
+        });
+        textarea.value = notes[active]?.content || '';
+      }
+
+      function saveActive() {
+        if (notes[active]) {
+          notes[active].content = textarea.value;
+          notes[active].title = textarea.value.split('\n')[0].slice(0, 20) || 'Untitled';
+        }
+      }
+
+      sidebar.querySelector('.note-add').onclick = () => {
+        saveActive();
+        notes.push({ title: 'New note', content: '' });
+        active = notes.length - 1;
+        render();
+        textarea.focus();
+      };
+
+      textarea.addEventListener('input', () => {
+        if (notes[active]) {
+          notes[active].content = textarea.value;
+          notes[active].title = textarea.value.split('\n')[0].slice(0, 20) || 'Untitled';
+          const items = sidebar.querySelectorAll('.note-item');
+          if (items[active]) items[active].textContent = notes[active].title;
+        }
+      });
+
+      render();
+    }
+  });
+}
+
+// ============================================
+// APP: CALCULATOR
+// ============================================
+function openCalc() {
+  const btns = ['C','(',')','/','7','8','9','*','4','5','6','-','1','2','3','+','0','.','<','='];
+  const btnHTML = btns.map(b => {
+    let cls = 'calc-btn';
+    if ('+-*/()'.includes(b)) cls += ' op';
+    if (b === '=') cls += ' eq';
+    return `<div class="${cls}" data-val="${b}">${b === '<' ? '&larr;' : b}</div>`;
+  }).join('');
+  const html = `<div class="calc"><div class="calc-display"><div class="calc-expr"></div><div class="calc-result">0</div></div><div class="calc-grid">${btnHTML}</div></div>`;
+
+  createWindow('calc', 'Calculator', 280, 400, html, {
+    icon: '#',
+    onInit(body) {
+      const expr = body.querySelector('.calc-expr');
+      const result = body.querySelector('.calc-result');
+      let current = '0', expression = '';
+
+      body.querySelectorAll('.calc-btn').forEach(b => b.onclick = () => {
+        const v = b.dataset.val;
+        if (v === 'C') { current = '0'; expression = ''; }
+        else if (v === '<') { current = current.length > 1 ? current.slice(0, -1) : '0'; }
+        else if (v === '=') {
+          try {
+            expression = current;
+            current = String(Function('"use strict";return (' + current + ')')());
+            if (current === 'Infinity' || current === 'NaN') current = 'Error';
+          } catch { current = 'Error'; }
+        }
+        else {
+          if (current === '0' && !'+-*/(.'.includes(v)) current = v;
+          else current += v;
+        }
+        expr.textContent = expression;
+        result.textContent = current;
+      });
+    }
+  });
+}
+
+// ============================================
+// APP: WEATHER
+// ============================================
+function openWeather() {
+  const conditions = [
+    { icon: '&#9728;&#65039;', temp: 24, desc: 'Clear skies over the cosmos', wind: '12 km/h', humidity: '45%', feel: '26' },
+    { icon: '&#9729;&#65039;', temp: 18, desc: 'Nebula clouds rolling in', wind: '20 km/h', humidity: '62%', feel: '16' },
+    { icon: '&#127783;&#65039;', temp: 14, desc: 'Cosmic rain showers', wind: '28 km/h', humidity: '88%', feel: '11' },
+    { icon: '&#10052;&#65039;', temp: -3, desc: 'Stardust snowfall', wind: '8 km/h', humidity: '70%', feel: '-7' },
+  ];
+  const w = conditions[Math.floor(Math.random() * conditions.length)];
+  const html = `<div class="weather-app">
+    <div class="weather-icon">${w.icon}</div>
+    <div class="weather-temp">${w.temp}°C</div>
+    <div class="weather-desc">${w.desc}</div>
+    <div class="weather-details">
+      <div>Wind<span>${w.wind}</span></div>
+      <div>Humidity<span>${w.humidity}</span></div>
+      <div>Feels like<span>${w.feel}°C</span></div>
+    </div>
+  </div>`;
+  createWindow('weather', 'Weather', 320, 300, html, { icon: '*' });
+}
+
+// ============================================
+// APP: SYSTEM MONITOR
+// ============================================
+function openSysMon() {
+  const html = `<div class="sysmon">
+    <div class="sysmon-row"><div class="sysmon-label">CPU</div><div class="sysmon-bar-bg"><div class="sysmon-bar" id="cpu-bar" style="width:30%;background:var(--accent)"></div></div><div class="sysmon-val" id="cpu-val">30%</div></div>
+    <div class="sysmon-row"><div class="sysmon-label">Memory</div><div class="sysmon-bar-bg"><div class="sysmon-bar" id="mem-bar" style="width:55%;background:var(--accent2)"></div></div><div class="sysmon-val" id="mem-val">55%</div></div>
+    <div class="sysmon-row"><div class="sysmon-label">Disk</div><div class="sysmon-bar-bg"><div class="sysmon-bar" id="disk-bar" style="width:42%;background:#44ddaa"></div></div><div class="sysmon-val" id="disk-val">42%</div></div>
+    <div class="sysmon-row"><div class="sysmon-label">GPU</div><div class="sysmon-bar-bg"><div class="sysmon-bar" id="gpu-bar" style="width:20%;background:#ffaa44"></div></div><div class="sysmon-val" id="gpu-val">20%</div></div>
+    <div class="sysmon-chart"><canvas id="sysmon-canvas"></canvas></div>
+  </div>`;
+
+  createWindow('sysmon', 'System Monitor', 400, 350, html, {
+    icon: '%',
+    onInit(body) {
+      const canvas = body.querySelector('#sysmon-canvas');
+      const ctx = canvas.getContext('2d');
+      const cpuHistory = new Array(60).fill(30);
+      const memHistory = new Array(60).fill(55);
+
+      function update() {
+        if (!document.getElementById('win-sysmon')) return;
+        const cpu = Math.min(100, Math.max(5, cpuHistory[cpuHistory.length-1] + (Math.random()-0.45)*15));
+        const mem = Math.min(95, Math.max(30, memHistory[memHistory.length-1] + (Math.random()-0.5)*5));
+        cpuHistory.push(cpu); cpuHistory.shift();
+        memHistory.push(mem); memHistory.shift();
+
+        body.querySelector('#cpu-bar').style.width = cpu + '%';
+        body.querySelector('#cpu-val').textContent = Math.round(cpu) + '%';
+        body.querySelector('#mem-bar').style.width = mem + '%';
+        body.querySelector('#mem-val').textContent = Math.round(mem) + '%';
+
+        const gpu = 15 + Math.random() * 20;
+        body.querySelector('#gpu-bar').style.width = gpu + '%';
+        body.querySelector('#gpu-val').textContent = Math.round(gpu) + '%';
+
+        // Chart
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width; canvas.height = rect.height;
+        const w = canvas.width, h = canvas.height;
+
+        ctx.fillStyle = 'rgba(0,0,0,0.2)';
+        ctx.fillRect(0, 0, w, h);
+
+        // Grid
+        ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+        for (let i = 0; i < 5; i++) { ctx.beginPath(); ctx.moveTo(0, i*h/4); ctx.lineTo(w, i*h/4); ctx.stroke(); }
+
+        function drawLine(data, color) {
+          ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.beginPath();
+          data.forEach((v, i) => {
+            const x = (i / (data.length-1)) * w;
+            const y = h - (v / 100) * h;
+            i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+          });
+          ctx.stroke();
+        }
+        drawLine(cpuHistory, 'rgba(123,140,255,0.8)');
+        drawLine(memHistory, 'rgba(255,123,171,0.8)');
+
+        setTimeout(update, 1000);
+      }
+      update();
+    }
+  });
+}
+
+// ============================================
+// APP: MUSIC VISUALIZER
+// ============================================
+function openMusic() {
+  const html = `<div class="music-app"><canvas class="music-canvas"></canvas>
+    <div class="music-controls">
+      <div class="music-btn" id="music-play">&#9654;</div>
+      <div class="music-track"><div>Cosmic Ambient Generator</div><div class="music-bar"><div class="music-progress" style="width:0%"></div></div></div>
+    </div></div>`;
+
+  createWindow('music', 'Music Viz', 500, 350, html, {
+    icon: '|',
+    onInit(body) {
+      const canvas = body.querySelector('.music-canvas');
+      const ctx = canvas.getContext('2d');
+      let playing = false;
+      let audioCtx2, analyser2, source;
+
+      body.querySelector('#music-play').onclick = () => {
+        if (!playing) {
+          audioCtx2 = new AudioContext();
+          analyser2 = audioCtx2.createAnalyser();
+          analyser2.fftSize = 512;
+
+          // Generate ambient drone
+          const osc1 = audioCtx2.createOscillator();
+          const osc2 = audioCtx2.createOscillator();
+          const osc3 = audioCtx2.createOscillator();
+          const lfo = audioCtx2.createOscillator();
+          const lfoGain = audioCtx2.createGain();
+          const master = audioCtx2.createGain();
+
+          osc1.type = 'sine'; osc1.frequency.value = 110;
+          osc2.type = 'triangle'; osc2.frequency.value = 165;
+          osc3.type = 'sine'; osc3.frequency.value = 220;
+          lfo.type = 'sine'; lfo.frequency.value = 0.2;
+          lfoGain.gain.value = 30;
+          master.gain.value = 0.15;
+
+          lfo.connect(lfoGain);
+          lfoGain.connect(osc1.frequency);
+          lfoGain.connect(osc2.frequency);
+
+          [osc1, osc2, osc3].forEach(o => { o.connect(master); o.start(); });
+          lfo.start();
+          master.connect(analyser2);
+          analyser2.connect(audioCtx2.destination);
+
+          source = { oscs: [osc1, osc2, osc3, lfo], master, ctx: audioCtx2 };
+          playing = true;
+          body.querySelector('#music-play').innerHTML = '&#9646;&#9646;';
+          animateMusic();
+        } else {
+          source.oscs.forEach(o => o.stop());
+          source.ctx.close();
+          playing = false;
+          body.querySelector('#music-play').innerHTML = '&#9654;';
+        }
+      };
+
+      let progW = 0;
+      function animateMusic() {
+        if (!playing || !document.getElementById('win-music')) return;
+        const rect = canvas.parentElement.getBoundingClientRect();
+        canvas.width = rect.width; canvas.height = rect.height - 52;
+        const w = canvas.width, h = canvas.height;
+
+        const data = new Uint8Array(analyser2.frequencyBinCount);
+        analyser2.getByteFrequencyData(data);
+
+        ctx.fillStyle = 'rgba(10,10,18,0.2)';
+        ctx.fillRect(0, 0, w, h);
+
+        const cx = w/2, cy = h/2;
+        const t = performance.now() * 0.001;
+
+        // Circular bars
+        const count = data.length / 2;
+        for (let i = 0; i < count; i++) {
+          const val = data[i] / 255;
+          const angle = (i / count) * Math.PI * 2 - Math.PI/2 + t * 0.1;
+          const r1 = 40;
+          const r2 = 40 + val * 100;
+          const hue = (i / count) * 360 + t * 20;
+
+          ctx.strokeStyle = `hsla(${hue},80%,60%,${val * 0.8})`;
+          ctx.lineWidth = Math.max(1, (w / count) * 1.5);
+          ctx.beginPath();
+          ctx.moveTo(cx + Math.cos(angle) * r1, cy + Math.sin(angle) * r1);
+          ctx.lineTo(cx + Math.cos(angle) * r2, cy + Math.sin(angle) * r2);
+          ctx.stroke();
+        }
+
+        // Inner glow
+        const avg = data.reduce((a, b) => a + b, 0) / data.length / 255;
+        const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, 40 + avg * 30);
+        grd.addColorStop(0, `hsla(${t * 30 % 360},60%,70%,${avg * 0.4})`);
+        grd.addColorStop(1, 'transparent');
+        ctx.fillStyle = grd;
+        ctx.fillRect(0, 0, w, h);
+
+        progW = (progW + 0.1) % 100;
+        body.querySelector('.music-progress').style.width = progW + '%';
+
+        requestAnimationFrame(animateMusic);
+      }
+    }
+  });
+}
+
+// ============================================
+// MAIN LOOP
+// ============================================
+function mainLoop(t) {
+  drawWallpaper(t);
+  requestAnimationFrame(mainLoop);
+}
+requestAnimationFrame(mainLoop);
+
+// Auto-open terminal on start
+setTimeout(openTerminal, 300);
+</script>
+</body>
+</html>

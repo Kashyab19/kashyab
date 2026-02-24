@@ -35,6 +35,7 @@ const Writings = lazy(() => import("./components/Blog/Writings"));
 const Post = lazy(() => import("./components/Blog/Post"));
 const Influence = lazy(() => import("./components/Influence/Influence"));
 const VideoGallery = lazy(() => import("./components/VideoGallery/VideoGallery"));
+const AIGarden = lazy(() => import("./components/AIGarden"));
 
 // Feature flag check - defaults to false if not set
 const isVideoGalleryEnabled = import.meta.env.VITE_ENABLE_VIDEO_GALLERY === "true";
@@ -48,6 +49,7 @@ function Header() {
         <div className="header-links">
           <NavLink to="/writings" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>Writings</NavLink>
           <NavLink to="/influence" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>Influence</NavLink>
+          <NavLink to="/ai-garden" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>AI Garden</NavLink>
           {isVideoGalleryEnabled && (
             <NavLink to="/videos" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>Videos</NavLink>
           )}
@@ -262,6 +264,14 @@ export default function App() {
               }
             />
           )}
+          <Route
+            path="/ai-garden"
+            element={
+              <Suspense fallback={<div />}>
+                <AIGarden />
+              </Suspense>
+            }
+          />
           <Route
             path="/:slug"
             element={
