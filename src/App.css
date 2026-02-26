@@ -614,3 +614,20 @@ a:hover {
     word-wrap: break-word;
   }
 }
+
+/* AI Garden */
+.ai-garden-card {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 1.25rem;
+  background: var(--bg-secondary);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.ai-garden-iframe {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--border-light);
+  border-radius: 6px;
+  background: #fff;
+}

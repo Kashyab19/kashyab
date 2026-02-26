@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Synth Canvas</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+  body { background: #0b0b12; color: #ddd; font-family: 'Segoe UI', sans-serif; overflow: hidden; }
+  canvas { display: block; position: fixed; top: 0; left: 0; z-index: 0; }
+
+  #keys {
+    position: fixed; bottom: 0; left: 0; right: 0; height: 180px;
+    display: flex; justify-content: center; align-items: flex-end; z-index: 5;
+    padding: 0 20px;
+  }
+  .key {
+    position: relative; width: 52px; height: 160px; margin: 0 2px;
+    background: linear-gradient(to bottom, #e8e8e8, #fff);
+    border-radius: 0 0 6px 6px; cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.4), inset 0 -3px 4px rgba(0,0,0,0.08);
+    transition: height 0.06s, box-shadow 0.06s;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 10px; font-size: 11px; color: #999;
+  }
+  .key.active {
+    height: 152px;
+    background: linear-gradient(to bottom, #d0d0d0, #f0f0f0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3), inset 0 -1px 2px rgba(0,0,0,0.05);
+  }
+  .key.black {
+    width: 34px; height: 105px; margin: 0 -14px; z-index: 6;
+    background: linear-gradient(to bottom, #222, #333);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.6), inset 0 -2px 3px rgba(0,0,0,0.3);
+    color: #666;
+  }
+  .key.black.active {
+    height: 100px;
+    background: linear-gradient(to bottom, #1a1a1a, #2a2a2a);
+    box-shadow: 0 2px 3px rgba(0,0,0,0.5);
+  }
+
+  #controls {
+    position: fixed; top: 20px; left: 20px; z-index: 10;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .ctrl-row { display: flex; align-items: center; gap: 10px; }
+  .ctrl-row label { font-size: 11px; color: rgba(255,255,255,0.4); width: 70px; text-transform: uppercase; letter-spacing: 1px; }
+  input[type=range] {
+    -webkit-appearance: none; width: 120px; height: 4px;
+    background: rgba(255,255,255,0.12); border-radius: 2px; outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 14px; height: 14px;
+    background: rgba(255,255,255,0.6); border-radius: 50%; cursor: pointer;
+  }
+  .wave-btns { display: flex; gap: 4px; }
+  .wave-btn {
+    padding: 4px 10px; font-size: 11px; border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.04); color: #888; border-radius: 12px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  .wave-btn.active { border-color: rgba(255,255,255,0.4); color: #fff; background: rgba(255,255,255,0.08); }
+
+  #info {
+    position: fixed; top: 20px; right: 20px; z-index: 10;
+    font-size: 12px; color: rgba(255,255,255,0.25); text-align: right;
+    line-height: 1.8;
+  }
+
+  #loopbar {
+    position: fixed; bottom: 190px; left: 50%; transform: translateX(-50%);
+    z-index: 10; display: flex; align-items: center; gap: 10px;
+  }
+  #loop-btn {
+    padding: 6px 16px; font-size: 12px; border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.04); color: #888; border-radius: 14px;
+    cursor: pointer; transition: all 0.15s;
+  }
+  #loop-btn.recording { border-color: #f44; color: #f66; background: rgba(255,50,50,0.1); }
+  #loop-btn.playing { border-color: #4f4; color: #6f6; background: rgba(50,255,50,0.08); }
+  #loop-steps {
+    display: flex; gap: 3px; height: 20px; align-items: center;
+  }
+  .step {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: rgba(255,255,255,0.08); transition: all 0.1s;
+  }
+  .step.has-note { background: rgba(255,255,255,0.25); }
+  .step.current { transform: scale(1.4); background: rgba(255,200,50,0.7); }
+</style>
+</head>
+<body>
+<canvas id="viz"></canvas>
+
+<div id="controls">
+  <div class="ctrl-row">
+    <label>Wave</label>
+    <div class="wave-btns">
+      <div class="wave-btn active" data-wave="sine">Sine</div>
+      <div class="wave-btn" data-wave="triangle">Tri</div>
+      <div class="wave-btn" data-wave="sawtooth">Saw</div>
+      <div class="wave-btn" data-wave="square">Sq</div>
+    </div>
+  </div>
+  <div class="ctrl-row">
+    <label>Attack</label>
+    <input type="range" id="attack" min="0.01" max="1" step="0.01" value="0.05">
+  </div>
+  <div class="ctrl-row">
+    <label>Release</label>
+    <input type="range" id="release" min="0.05" max="2" step="0.01" value="0.4">
+  </div>
+  <div class="ctrl-row">
+    <label>Reverb</label>
+    <input type="range" id="reverb" min="0" max="1" step="0.01" value="0.3">
+  </div>
+  <div class="ctrl-row">
+    <label>Delay</label>
+    <input type="range" id="delay" min="0" max="0.8" step="0.01" value="0">
+  </div>
+</div>
+
+<div id="info">
+  Keyboard: A-L + W-P for notes<br>
+  Z/X: octave down/up<br>
+  Space: record/play loop
+</div>
+
+<div id="loopbar">
+  <div id="loop-btn">Loop</div>
+  <div id="loop-steps"></div>
+</div>
+
+<div id="keys"></div>
+
+<script>
+// --- Audio Setup ---
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const masterGain = audioCtx.createGain();
+masterGain.gain.value = 0.35;
+
+const analyser = audioCtx.createAnalyser();
+analyser.fftSize = 2048;
+const bufLen = analyser.frequencyBinCount;
+const dataArray = new Uint8Array(bufLen);
+const freqArray = new Uint8Array(bufLen);
+
+// Convolver (reverb)
+const convolver = audioCtx.createConvolver();
+const reverbGain = audioCtx.createGain();
+reverbGain.gain.value = 0.3;
+const dryGain = audioCtx.createGain();
+dryGain.gain.value = 0.7;
+
+function createImpulse(duration = 2, decay = 3) {
+  const len = audioCtx.sampleRate * duration;
+  const buf = audioCtx.createBuffer(2, len, audioCtx.sampleRate);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = buf.getChannelData(ch);
+    for (let i = 0; i < len; i++) {
+      d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+    }
+  }
+  return buf;
+}
+convolver.buffer = createImpulse();
+
+// Delay
+const delayNode = audioCtx.createDelay(1);
+delayNode.delayTime.value = 0.33;
+const delayFeedback = audioCtx.createGain();
+delayFeedback.gain.value = 0.3;
+const delayMix = audioCtx.createGain();
+delayMix.gain.value = 0;
+
+// Routing
+masterGain.connect(dryGain);
+masterGain.connect(convolver);
+convolver.connect(reverbGain);
+dryGain.connect(analyser);
+reverbGain.connect(analyser);
+
+masterGain.connect(delayNode);
+delayNode.connect(delayFeedback);
+delayFeedback.connect(delayNode);
+delayNode.connect(delayMix);
+delayMix.connect(analyser);
+
+analyser.connect(audioCtx.destination);
+
+// --- Synth ---
+let waveType = 'sine';
+let octave = 4;
+const activeNotes = {};
+
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+function noteFreq(note, oct) {
+  const midi = (oct + 1) * 12 + NOTE_NAMES.indexOf(note);
+  return 440 * Math.pow(2, (midi - 69) / 12);
+}
+
+const keyLayout = [
+  { note: 'C', black: false, kb: 'a' },
+  { note: 'C#', black: true, kb: 'w' },
+  { note: 'D', black: false, kb: 's' },
+  { note: 'D#', black: true, kb: 'e' },
+  { note: 'E', black: false, kb: 'd' },
+  { note: 'F', black: false, kb: 'f' },
+  { note: 'F#', black: true, kb: 't' },
+  { note: 'G', black: false, kb: 'g' },
+  { note: 'G#', black: true, kb: 'y' },
+  { note: 'A', black: false, kb: 'h' },
+  { note: 'A#', black: true, kb: 'u' },
+  { note: 'B', black: false, kb: 'j' },
+  { note: 'C', black: false, kb: 'k', octUp: true },
+  { note: 'C#', black: true, kb: 'o', octUp: true },
+  { note: 'D', black: false, kb: 'l', octUp: true },
+  { note: 'D#', black: true, kb: 'p', octUp: true },
+  { note: 'E', black: false, kb: ';', octUp: true },
+];
+
+// Build keyboard UI
+const keysDiv = document.getElementById('keys');
+keyLayout.forEach((k, i) => {
+  const el = document.createElement('div');
+  el.className = 'key' + (k.black ? ' black' : '');
+  el.dataset.index = i;
+  el.innerHTML = `<span>${k.kb.toUpperCase()}</span>`;
+  keysDiv.appendChild(el);
+});
+const keyEls = keysDiv.querySelectorAll('.key');
+
+function playNote(index) {
+  if (activeNotes[index]) return;
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+
+  const k = keyLayout[index];
+  const oct = octave + (k.octUp ? 1 : 0);
+  const freq = noteFreq(k.note, oct);
+  const atk = parseFloat(document.getElementById('attack').value);
+  const rel = parseFloat(document.getElementById('release').value);
+
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = waveType;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, audioCtx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + atk);
+
+  osc.connect(gain);
+  gain.connect(masterGain);
+  osc.start();
+
+  activeNotes[index] = { osc, gain, freq, note: k.note };
+  keyEls[index].classList.add('active');
+
+  // Viz burst
+  vizBursts.push({ x: Math.random() * W, y: H * 0.4, freq, life: 1, color: freqToColor(freq) });
+
+  // Loop recording
+  if (loopState === 'recording') {
+    const step = Math.floor(((performance.now() - loopStart) % loopLength) / stepMs);
+    loopData[step].push(index);
+  }
+}
+
+function stopNote(index) {
+  const n = activeNotes[index];
+  if (!n) return;
+  const rel = parseFloat(document.getElementById('release').value);
+  n.gain.gain.cancelScheduledValues(audioCtx.currentTime);
+  n.gain.gain.setValueAtTime(n.gain.gain.value, audioCtx.currentTime);
+  n.gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + rel);
+  const osc = n.osc;
+  setTimeout(() => osc.stop(), rel * 1000 + 50);
+  delete activeNotes[index];
+  keyEls[index].classList.remove('active');
+}
+
+// --- Keyboard input ---
+const keyMap = {};
+keyLayout.forEach((k, i) => { keyMap[k.kb] = i; });
+
+document.addEventListener('keydown', e => {
+  if (e.repeat) return;
+  const k = e.key.toLowerCase();
+  if (k === 'z') { octave = Math.max(1, octave - 1); return; }
+  if (k === 'x') { octave = Math.min(7, octave + 1); return; }
+  if (k === ' ') { e.preventDefault(); toggleLoop(); return; }
+  if (keyMap[k] !== undefined) playNote(keyMap[k]);
+});
+document.addEventListener('keyup', e => {
+  const k = e.key.toLowerCase();
+  if (keyMap[k] !== undefined) stopNote(keyMap[k]);
+});
+
+// Mouse/touch on keys
+keyEls.forEach(el => {
+  const idx = parseInt(el.dataset.index);
+  el.addEventListener('mousedown', e => { e.preventDefault(); playNote(idx); });
+  el.addEventListener('mouseup', () => stopNote(idx));
+  el.addEventListener('mouseleave', () => stopNote(idx));
+  el.addEventListener('touchstart', e => { e.preventDefault(); playNote(idx); }, { passive: false });
+  el.addEventListener('touchend', e => { e.preventDefault(); stopNote(idx); });
+});
+
+// --- Wave buttons ---
+document.querySelectorAll('.wave-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.wave-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    waveType = btn.dataset.wave;
+  });
+});
+
+// --- Controls ---
+document.getElementById('reverb').addEventListener('input', e => {
+  const v = parseFloat(e.target.value);
+  reverbGain.gain.value = v;
+  dryGain.gain.value = 1 - v * 0.5;
+});
+document.getElementById('delay').addEventListener('input', e => {
+  delayMix.gain.value = parseFloat(e.target.value);
+  delayFeedback.gain.value = parseFloat(e.target.value) * 0.5;
+});
+
+// --- Loop ---
+const STEPS = 16;
+const BPM = 120;
+const loopLength = (60 / BPM) * 4 * 1000; // 1 bar in ms
+const stepMs = loopLength / STEPS;
+let loopState = 'idle'; // idle, recording, playing
+let loopStart = 0;
+let loopData = Array.from({ length: STEPS }, () => []);
+let currentStep = -1;
+
+const stepsDiv = document.getElementById('loop-steps');
+for (let i = 0; i < STEPS; i++) {
+  const s = document.createElement('div');
+  s.className = 'step';
+  stepsDiv.appendChild(s);
+}
+const stepEls = stepsDiv.querySelectorAll('.step');
+
+function toggleLoop() {
+  const btn = document.getElementById('loop-btn');
+  if (loopState === 'idle') {
+    loopState = 'recording';
+    loopData = Array.from({ length: STEPS }, () => []);
+    loopStart = performance.now();
+    btn.className = 'recording';
+    btn.textContent = 'Rec...';
+  } else if (loopState === 'recording') {
+    loopState = 'playing';
+    loopStart = performance.now();
+    btn.className = 'playing';
+    btn.textContent = 'Playing';
+  } else {
+    loopState = 'idle';
+    currentStep = -1;
+    btn.className = '';
+    btn.textContent = 'Loop';
+    stepEls.forEach(s => s.classList.remove('current'));
+  }
+}
+
+document.getElementById('loop-btn').addEventListener('click', toggleLoop);
+
+function updateLoop() {
+  if (loopState !== 'playing') return;
+  const elapsed = (performance.now() - loopStart) % loopLength;
+  const step = Math.floor(elapsed / stepMs);
+  if (step !== currentStep) {
+    currentStep = step;
+    stepEls.forEach((s, i) => {
+      s.classList.toggle('current', i === step);
+      s.classList.toggle('has-note', loopData[i].length > 0);
+    });
+    loopData[step].forEach(idx => {
+      playNote(idx);
+      setTimeout(() => stopNote(idx), stepMs * 0.8);
+    });
+  }
+}
+
+// --- Visualization ---
+const canvas = document.getElementById('viz');
+const ctx = canvas.getContext('2d');
+let W, H;
+function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+resize();
+window.addEventListener('resize', resize);
+
+const vizBursts = [];
+
+function freqToColor(freq) {
+  const hue = (Math.log2(freq / 130) * 60) % 360;
+  return `hsl(${hue}, 85%, 65%)`;
+}
+
+function hslStr(h, s, l, a) { return `hsla(${h},${s}%,${l}%,${a})`; }
+
+function drawViz() {
+  ctx.fillStyle = 'rgba(11,11,18,0.15)';
+  ctx.fillRect(0, 0, W, H);
+
+  // Waveform
+  analyser.getByteTimeDomainData(dataArray);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.beginPath();
+  const sliceW = W / bufLen;
+  for (let i = 0; i < bufLen; i++) {
+    const v = dataArray[i] / 128;
+    const y = (v * H) / 2;
+    i === 0 ? ctx.moveTo(0, y) : ctx.lineTo(i * sliceW, y);
+  }
+  ctx.stroke();
+
+  // Frequency bars
+  analyser.getByteFrequencyData(freqArray);
+  const barCount = 64;
+  const barW = W / barCount;
+  for (let i = 0; i < barCount; i++) {
+    const idx = Math.floor(i * (bufLen * 0.4) / barCount);
+    const val = freqArray[idx] / 255;
+    const h = (i / barCount) * 300;
+    const barH = val * H * 0.35;
+
+    ctx.fillStyle = hslStr(h, 80, 55, val * 0.5);
+    ctx.fillRect(i * barW, H * 0.5 - barH / 2, barW - 1, barH);
+
+    // Mirror glow
+    ctx.fillStyle = hslStr(h, 80, 55, val * 0.15);
+    ctx.fillRect(i * barW - 2, H * 0.5 - barH / 2 - 4, barW + 3, barH + 8);
+  }
+
+  // Circular visualizer
+  const cx = W / 2, cy = H * 0.38;
+  const baseR = 80;
+  ctx.lineWidth = 1.5;
+  for (let i = 0; i < 128; i++) {
+    const idx = Math.floor(i * (bufLen * 0.5) / 128);
+    const val = freqArray[idx] / 255;
+    const angle = (i / 128) * Math.PI * 2 - Math.PI / 2;
+    const r1 = baseR;
+    const r2 = baseR + val * 120;
+    const h = (i / 128) * 360;
+
+    ctx.strokeStyle = hslStr(h, 80, 60, val * 0.7);
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(angle) * r1, cy + Math.sin(angle) * r1);
+    ctx.lineTo(cx + Math.cos(angle) * r2, cy + Math.sin(angle) * r2);
+    ctx.stroke();
+  }
+
+  // Bursts
+  for (let i = vizBursts.length - 1; i >= 0; i--) {
+    const b = vizBursts[i];
+    b.life -= 0.015;
+    if (b.life <= 0) { vizBursts.splice(i, 1); continue; }
+    const r = (1 - b.life) * 150;
+    ctx.strokeStyle = b.color.replace(')', `,${b.life * 0.5})`).replace('hsl', 'hsla');
+    ctx.lineWidth = b.life * 3;
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, r, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // Active notes text
+  const activeFreqs = Object.values(activeNotes);
+  if (activeFreqs.length) {
+    ctx.fillStyle = 'rgba(255,255,255,0.12)';
+    ctx.font = '48px sans-serif';
+    ctx.textAlign = 'center';
+    const label = activeFreqs.map(n => n.note).join(' ');
+    ctx.fillText(label, W / 2, 80);
+  }
+
+  updateLoop();
+  requestAnimationFrame(drawViz);
+}
+
+drawViz();
+</script>
+</body>
+</html>
