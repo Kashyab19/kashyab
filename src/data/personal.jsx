@@ -52,7 +52,7 @@ export const socialLinks = [
   },
   {
     name: "Substack",
-    url: "https://thefirstderivative.substack.com/",
+    url: "https://kashyabnarrates.substack.com/",
     icon: socialIcons.substack,
   },
   {
@@ -71,7 +71,7 @@ export const personalInfo = {
   name: "Kashyab",
   heading: "Hi, I am Kashyab!",
   bio: "I study systems. Whether it is history, economics, or computer science, I am obsessed with how complex parts fit together to function as a whole. I take this understanding of broad mechanics and apply it to backend engineering. I do not just write code. I build infrastructure that supports real business needs. When I am not shipping software, I am writing about the intersection of technology and the economy or doing deadlifts.",
-  current: "Full Stack Engineer • Specialized in High-Availability Web Apps • Immediate Availability for USA Remote or Relocation",
+  current: "Tinkering and figuring out. Even thinking of brewing my own beer.",
 };
 
 export const works = [
@@ -92,7 +92,7 @@ export const works = [
   },
   {
     title: "Thinking and writing about how systems work?",
-    url: "https://thefirstderivative.substack.com/",
+    url: "https://kashyabnarrates.substack.com/",
     description: "Wrote nearly 10+ system design topics on my Substack. Grew it 1500 views and 35 subscribers.",
   },
 ];
@@ -163,7 +163,7 @@ export const podcasts = [
   },
 ];
 
-export const podcastsUpdatedOn = "2025-12-18";
+export const podcastsUpdatedOn = "2025-02-24";
 
 // People you look up to (fill this list in over time)
 export const people = [
@@ -172,6 +172,7 @@ export const people = [
   { name: "Charlie Munger", reason: "Mental models, clear thinking, long-termism." },
   { name: "Naval Ravikant", reason: "Building a company that lasts" },
   { name: "David Senra", reason: "Storytelling and compounded my learning speed" },
+  { name: "Jagannath Ramesh", reason: "Stands by my side silently through my journey" },
 ];
 
 export const videos = [

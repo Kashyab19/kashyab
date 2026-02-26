@@ -49,7 +49,7 @@ function Header() {
         <div className="header-links">
           <NavLink to="/writings" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>Writings</NavLink>
           <NavLink to="/influence" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>Influence</NavLink>
-          <NavLink to="/ai-garden" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>AI Garden</NavLink>
+          <NavLink to="/claurden" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>AI Garden</NavLink>
           {isVideoGalleryEnabled && (
             <NavLink to="/videos" className={({ isActive }) => isActive ? "header-link active" : "header-link"}>Videos</NavLink>
           )}
@@ -265,7 +265,7 @@ export default function App() {
             />
           )}
           <Route
-            path="/ai-garden"
+            path="/claurden"
             element={
               <Suspense fallback={<div />}>
                 <AIGarden />
