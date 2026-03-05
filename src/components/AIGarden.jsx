@@ -16,6 +16,11 @@ const artifacts = [
     description: "A miniature operating system interface set in outer space.",
     src: "/ai-garden/cosmos-os.html",
   },
+  {
+    title: "Thread Visualizer",
+    description: "Interactive visualizations of processes, threads, coroutines, and more — explore how concurrency works under the hood.",
+    src: "/ai-garden/thread-visualizer.html",
+  },
 ];
 
 export default function AIGarden() {

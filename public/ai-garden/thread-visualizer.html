@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Thread Visualizer</title>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a0c10; }
+  button:hover { opacity: 0.85; }
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+  @keyframes coropulse { 0%,100%{opacity:0.2;transform:scale(0.8)} 50%{opacity:1;transform:scale(1.2)} }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+const TOPICS = ["Process", "Subprocess", "Routine", "Coroutine", "Thread"];
+
+const palette = {
+  bg: "#0a0c10",
+  panel: "#111318",
+  border: "#1e2330",
+  accent: "#00e5ff",
+  accent2: "#ff6b35",
+  accent3: "#7c3aed",
+  accent4: "#22c55e",
+  accent5: "#f59e0b",
+  text: "#e2e8f0",
+  muted: "#4a5568",
+  dim: "#2d3748",
+};
+
+// ─── PROCESS VISUALIZATION ───────────────────────────────────────────────────
+function ProcessViz() {
+  const processes = [
+    { id: "PID 1042", name: "Chrome", color: palette.accent, mem: "512MB", files: 14 },
+    { id: "PID 2301", name: "Terminal", color: palette.accent4, mem: "48MB", files: 3 },
+    { id: "PID 3887", name: "VSCode", color: palette.accent3, mem: "320MB", files: 22 },
+  ];
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <p style={{ color: palette.muted, fontSize: 13, margin: 0, lineHeight: 1.6 }}>
+        Each process is a fully isolated world. Separate memory, separate files, separate identity.
+        They cannot touch each other's data — communication requires explicit channels.
+      </p>
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+        {processes.map((p) => (
+          <div key={p.id} style={{
+            flex: 1, minWidth: 160,
+            border: `1px solid ${p.color}33`,
+            borderRadius: 10,
+            padding: 16,
+            background: `${p.color}08`,
+            position: "relative",
+            overflow: "hidden",
+          }}>
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: p.color }} />
+            <div style={{ fontSize: 11, color: p.color, fontFamily: "monospace", marginBottom: 4 }}>{p.id}</div>
+            <div style={{ fontSize: 18, fontWeight: 700, color: palette.text, marginBottom: 12 }}>{p.name}</div>
+            {[
+              { label: "MEMORY", value: p.mem, color: palette.accent2 },
+              { label: "CODE", value: "isolated", color: palette.accent5 },
+              { label: "HEAP", value: "isolated", color: palette.accent4 },
+              { label: "OPEN FILES", value: p.files, color: palette.accent3 },
+            ].map(seg => (
+              <div key={seg.label} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "4px 0", borderBottom: `1px solid ${palette.border}` }}>
+                <span style={{ fontSize: 10, color: palette.muted, letterSpacing: 1 }}>{seg.label}</span>
+                <span style={{ fontSize: 11, color: seg.color, fontFamily: "monospace" }}>{seg.value}</span>
+              </div>
+            ))}
+            <div style={{ marginTop: 10, fontSize: 10, color: palette.muted, textAlign: "center" }}>
+              🔒 ISOLATED
+            </div>
+          </div>
+        ))}
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, justifyContent: "center", padding: "12px", border: `1px dashed ${palette.border}`, borderRadius: 8 }}>
+        <span style={{ fontSize: 11, color: palette.muted }}>IPC only: pipes · sockets · shared memory</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── SUBPROCESS VISUALIZATION ─────────────────────────────────────────────────
+function SubprocessViz() {
+  const [highlighted, setHighlighted] = useState(null);
+  const tree = {
+    id: "PID 1001", name: "bash", color: palette.accent4,
+    children: [
+      { id: "PID 1042", name: "git clone", color: palette.accent, children: [] },
+      {
+        id: "PID 1055", name: "npm install", color: palette.accent2,
+        children: [
+          { id: "PID 1061", name: "node gyp", color: palette.accent5, children: [] },
+          { id: "PID 1062", name: "esbuild", color: palette.accent5, children: [] },
+        ]
+      },
+    ]
+  };
+
+  const Node = ({ node, depth }) => (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 0 }}>
+      <div
+        onMouseEnter={() => setHighlighted(node.id)}
+        onMouseLeave={() => setHighlighted(null)}
+        style={{
+          display: "flex", alignItems: "center", gap: 8,
+          padding: "8px 14px", borderRadius: 8,
+          border: `1px solid ${highlighted === node.id ? node.color : node.color + "44"}`,
+          background: highlighted === node.id ? `${node.color}15` : `${node.color}08`,
+          cursor: "default", transition: "all 0.2s",
+          marginLeft: depth * 32,
+        }}>
+        <div style={{ width: 8, height: 8, borderRadius: "50%", background: node.color }} />
+        <span style={{ fontSize: 11, color: node.color, fontFamily: "monospace" }}>{node.id}</span>
+        <span style={{ fontSize: 13, color: palette.text, fontWeight: 600 }}>{node.name}</span>
+        {depth > 0 && <span style={{ fontSize: 10, color: palette.muted }}>subprocess</span>}
+        {depth === 0 && <span style={{ fontSize: 10, color: palette.accent4 }}>parent</span>}
+      </div>
+      {node.children.map(child => (
+        <div key={child.id} style={{ display: "flex", flexDirection: "column", marginLeft: depth * 32 + 18 }}>
+          <div style={{ width: 1, height: 12, background: palette.border, marginLeft: 13 }} />
+          <div style={{ display: "flex", alignItems: "flex-start" }}>
+            <div style={{ width: 14, height: 1, background: palette.border, marginTop: 16, marginLeft: 0 }} />
+            <Node node={child} depth={0} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <p style={{ color: palette.muted, fontSize: 13, margin: 0, lineHeight: 1.6 }}>
+        A subprocess is just a process spawned by another. The parent can read its output,
+        wait for it to finish, or kill it. Hierarchical relationship, but technically identical to any process.
+      </p>
+      <div style={{ padding: 20, border: `1px solid ${palette.border}`, borderRadius: 10, background: palette.panel }}>
+        <Node node={tree} depth={0} />
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+        {[
+          { label: "fork()", desc: "Clone parent into child" },
+          { label: "exec()", desc: "Replace child with new program" },
+          { label: "wait()", desc: "Parent blocks until child exits" },
+          { label: "pipe()", desc: "Connect stdout → stdin" },
+        ].map(item => (
+          <div key={item.label} style={{ padding: "8px 12px", border: `1px solid ${palette.border}`, borderRadius: 6, background: palette.bg }}>
+            <span style={{ fontFamily: "monospace", fontSize: 11, color: palette.accent, marginRight: 8 }}>{item.label}</span>
+            <span style={{ fontSize: 11, color: palette.muted }}>{item.desc}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── ROUTINE VISUALIZATION ────────────────────────────────────────────────────
+function RoutineViz() {
+  const [step, setStep] = useState(0);
+  const [running, setRunning] = useState(false);
+  const timerRef = useRef();
+
+  const steps = [
+    { stack: ["main()"], active: "main", line: "main() begins executing" },
+    { stack: ["main()", "fetchData()"], active: "fetchData", line: "main() calls fetchData() — main is now frozen" },
+    { stack: ["main()", "fetchData()", "parseJSON()"], active: "parseJSON", line: "fetchData() calls parseJSON() — fetchData is now frozen" },
+    { stack: ["main()", "fetchData()"], active: "fetchData", line: "parseJSON() returns → fetchData() resumes" },
+    { stack: ["main()"], active: "main", line: "fetchData() returns → main() resumes" },
+    { stack: ["main()", "renderUI()"], active: "renderUI", line: "main() calls renderUI()" },
+    { stack: ["main()"], active: "main", line: "renderUI() returns → main() completes" },
+  ];
+
+  useEffect(() => {
+    if (running) {
+      timerRef.current = setInterval(() => {
+        setStep(s => {
+          if (s >= steps.length - 1) { setRunning(false); return s; }
+          return s + 1;
+        });
+      }, 900);
+    }
+    return () => clearInterval(timerRef.current);
+  }, [running]);
+
+  const cur = steps[step];
+  const fns = ["main()", "fetchData()", "parseJSON()", "renderUI()"];
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <p style={{ color: palette.muted, fontSize: 13, margin: 0, lineHeight: 1.6 }}>
+        Routines are strictly synchronous and hierarchical. The caller freezes while the callee runs.
+        The call stack is the single source of truth — a LIFO record of "where to return."
+      </p>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+        <div style={{ border: `1px solid ${palette.border}`, borderRadius: 10, padding: 16, background: palette.panel }}>
+          <div style={{ fontSize: 10, color: palette.muted, letterSpacing: 2, marginBottom: 12 }}>CALL STACK (top = active)</div>
+          <div style={{ display: "flex", flexDirection: "column-reverse", gap: 4, minHeight: 140 }}>
+            {cur.stack.map((frame, i) => {
+              const isTop = i === cur.stack.length - 1;
+              return (
+                <div key={i} style={{
+                  padding: "8px 12px",
+                  borderRadius: 6,
+                  background: isTop ? `${palette.accent}22` : palette.bg,
+                  border: `1px solid ${isTop ? palette.accent : palette.border}`,
+                  fontFamily: "monospace",
+                  fontSize: 12,
+                  color: isTop ? palette.accent : palette.muted,
+                  transition: "all 0.3s",
+                  display: "flex", justifyContent: "space-between"
+                }}>
+                  <span>{frame}</span>
+                  <span style={{ fontSize: 10 }}>{isTop ? "← executing" : "← waiting"}</span>
+                </div>
+              );
+            })}
+          </div>
+          <div style={{ marginTop: 12, padding: "6px 10px", background: palette.bg, borderRadius: 6, fontSize: 10, color: palette.muted, fontFamily: "monospace", textAlign: "center" }}>
+            stack grows ↑  /  shrinks ↓
+          </div>
+        </div>
+        <div style={{ border: `1px solid ${palette.border}`, borderRadius: 10, padding: 16, background: palette.panel }}>
+          <div style={{ fontSize: 10, color: palette.muted, letterSpacing: 2, marginBottom: 12 }}>FUNCTIONS</div>
+          {fns.map(fn => {
+            const isActive = cur.stack.includes(fn);
+            const isCurrent = cur.stack[cur.stack.length - 1] === fn;
+            return (
+              <div key={fn} style={{
+                padding: "8px 12px", marginBottom: 4, borderRadius: 6,
+                border: `1px solid ${isCurrent ? palette.accent2 : isActive ? palette.accent2 + "44" : palette.border}`,
+                background: isCurrent ? `${palette.accent2}18` : isActive ? `${palette.accent2}08` : "transparent",
+                display: "flex", alignItems: "center", gap: 8, transition: "all 0.3s",
+              }}>
+                <div style={{ width: 6, height: 6, borderRadius: "50%", background: isCurrent ? palette.accent2 : isActive ? palette.accent2 + "88" : palette.muted }} />
+                <span style={{ fontFamily: "monospace", fontSize: 12, color: isCurrent ? palette.accent2 : isActive ? palette.text : palette.muted }}>{fn}</span>
+                {isCurrent && <span style={{ fontSize: 10, color: palette.accent2, marginLeft: "auto" }}>▶ running</span>}
+                {isActive && !isCurrent && <span style={{ fontSize: 10, color: palette.muted, marginLeft: "auto" }}>⏸ frozen</span>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <div style={{ padding: "10px 14px", background: `${palette.accent5}12`, border: `1px solid ${palette.accent5}44`, borderRadius: 8, fontFamily: "monospace", fontSize: 12, color: palette.accent5 }}>
+        {cur.line}
+      </div>
+      <div style={{ display: "flex", gap: 8 }}>
+        <button onClick={() => { setStep(0); setRunning(false); }} style={{ flex: 1, padding: "8px", borderRadius: 6, border: `1px solid ${palette.border}`, background: palette.panel, color: palette.muted, cursor: "pointer", fontSize: 12 }}>↺ Reset</button>
+        <button onClick={() => { if (step < steps.length - 1) setStep(s => s + 1); }} style={{ flex: 1, padding: "8px", borderRadius: 6, border: `1px solid ${palette.border}`, background: palette.panel, color: palette.text, cursor: "pointer", fontSize: 12 }}>Step →</button>
+        <button onClick={() => { setStep(0); setRunning(true); }} style={{ flex: 1, padding: "8px", borderRadius: 6, border: `1px solid ${palette.accent}44`, background: `${palette.accent}15`, color: palette.accent, cursor: "pointer", fontSize: 12 }}>▶ Auto</button>
+      </div>
+    </div>
+  );
+}
+
+// ─── COROUTINE VISUALIZATION ──────────────────────────────────────────────────
+function CoroutineViz() {
+  const [tick, setTick] = useState(0);
+  const [running, setRunning] = useState(false);
+  const timerRef = useRef();
+
+  const timeline = [
+    { a: "running", b: "suspended", line: "A starts: begins fetching URL..." },
+    { a: "suspended", b: "running", line: "A hits await → yields. B resumes." },
+    { a: "suspended", b: "running", line: "B: processing batch items..." },
+    { a: "suspended", b: "suspended", line: "B hits await → yields. A resumes." },
+    { a: "running", b: "suspended", line: "A: HTTP response arrived, parsing..." },
+    { a: "suspended", b: "running", line: "A yields again. B resumes." },
+    { a: "suspended", b: "running", line: "B: DB query returned, crunching..." },
+    { a: "running", b: "suspended", line: "B yields. A: final processing..." },
+    { a: "done", b: "running", line: "A complete ✓ — B finishes up..." },
+    { a: "done", b: "done", line: "B complete ✓ — all done, one thread." },
+  ];
+
+  useEffect(() => {
+    if (running) {
+      timerRef.current = setInterval(() => {
+        setTick(t => { if (t >= timeline.length - 1) { setRunning(false); return t; } return t + 1; });
+      }, 900);
+    }
+    return () => clearInterval(timerRef.current);
+  }, [running]);
+
+  const cur = timeline[tick];
+
+  const statusColor = (s) => ({ running: palette.accent4, suspended: palette.accent5, done: palette.muted }[s]);
+
+  const CoBox = ({ name, code, status }) => (
+    <div style={{
+      flex: 1, border: `2px solid ${statusColor(status)}`,
+      borderRadius: 10, padding: 16, background: `${statusColor(status)}0a`,
+      transition: "all 0.3s",
+    }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+        <span style={{ fontWeight: 700, color: palette.text, fontSize: 14 }}>{name}</span>
+        <span style={{
+          fontSize: 10, padding: "2px 8px", borderRadius: 4,
+          background: `${statusColor(status)}25`, color: statusColor(status),
+          letterSpacing: 1, fontFamily: "monospace",
+        }}>{status.toUpperCase()}</span>
+      </div>
+      <div style={{ fontFamily: "monospace", fontSize: 11, color: palette.muted, lineHeight: 1.9 }}>
+        {code.map((line, i) => (
+          <div key={i} style={{ color: line.highlight ? statusColor(status) : palette.muted, background: line.highlight ? `${statusColor(status)}15` : "transparent", padding: "0 4px", borderRadius: 3 }}>{line.text}</div>
+        ))}
+      </div>
+      {status === "suspended" && (
+        <div style={{ marginTop: 10, fontSize: 10, color: palette.accent5, textAlign: "center" }}>
+          💤 suspended — state preserved
+        </div>
+      )}
+      {status === "running" && (
+        <div style={{ marginTop: 10, display: "flex", justifyContent: "center", gap: 4 }}>
+          {[0, 1, 2].map(i => (
+            <div key={i} style={{
+              width: 5, height: 5, borderRadius: "50%", background: palette.accent4,
+              animation: `coropulse 0.8s ${i * 0.15}s infinite`,
+            }} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <p style={{ color: palette.muted, fontSize: 13, margin: 0, lineHeight: 1.6 }}>
+        Coroutines cooperate — each voluntarily yields at <code style={{ color: palette.accent, background: palette.bg, padding: "1px 5px", borderRadius: 3 }}>await</code> points, saving its full state. Two concurrent tasks, one thread, zero race conditions.
+      </p>
+      <div style={{ display: "flex", gap: 10 }}>
+        <CoBox name="Coroutine A" status={cur.a} code={[
+          { text: "async def fetch_data():" },
+          { text: "  url = get_url()" },
+          { text: "  res = await http.get(url)", highlight: cur.a === "suspended" },
+          { text: "  data = parse(res)" },
+          { text: "  return data" },
+        ]} />
+        <CoBox name="Coroutine B" status={cur.b} code={[
+          { text: "async def process_batch():" },
+          { text: "  items = get_items()" },
+          { text: "  rows = await db.query()", highlight: cur.b === "suspended" },
+          { text: "  result = crunch(rows)" },
+          { text: "  return result" },
+        ]} />
+      </div>
+      <div style={{ padding: "10px 14px", background: `${palette.accent4}12`, border: `1px solid ${palette.accent4}44`, borderRadius: 8, fontFamily: "monospace", fontSize: 12, color: palette.accent4 }}>
+        {cur.line}
+      </div>
+      <div style={{ height: 6, borderRadius: 3, background: palette.dim, overflow: "hidden" }}>
+        <div style={{ height: "100%", width: `${(tick / (timeline.length - 1)) * 100}%`, background: `linear-gradient(90deg, ${palette.accent4}, ${palette.accent})`, transition: "width 0.3s" }} />
+      </div>
+      <div style={{ display: "flex", gap: 8 }}>
+        <button onClick={() => { setTick(0); setRunning(false); }} style={{ flex: 1, padding: "8px", borderRadius: 6, border: `1px solid ${palette.border}`, background: palette.panel, color: palette.muted, cursor: "pointer", fontSize: 12 }}>↺ Reset</button>
+        <button onClick={() => { if (tick < timeline.length - 1) setTick(t => t + 1); }} style={{ flex: 1, padding: "8px", borderRadius: 6, border: `1px solid ${palette.border}`, background: palette.panel, color: palette.text, cursor: "pointer", fontSize: 12 }}>Step →</button>
+        <button onClick={() => { setTick(0); setRunning(true); }} style={{ flex: 1, padding: "8px", borderRadius: 6, border: `1px solid ${palette.accent4 + "44"}`, background: `${palette.accent4}15`, color: palette.accent4, cursor: "pointer", fontSize: 12 }}>▶ Auto</button>
+      </div>
+    </div>
+  );
+}
+
+// ─── THREAD VISUALIZATION ─────────────────────────────────────────────────────
+function ThreadViz() {
+  const [tick, setTick] = useState(0);
+  const [running, setRunning] = useState(false);
+  const timerRef = useRef();
+  const maxTick = 16;
+
+  useEffect(() => {
+    if (running) {
+      timerRef.current = setInterval(() => {
+        setTick(t => { if (t >= maxTick) { setRunning(false); return t; } return t + 1; });
+      }, 450);
+    }
+    return () => clearInterval(timerRef.current);
+  }, [running]);
+
+  const threadAActive = [0,1,2,5,6,9,10,13,14].includes(tick);
+  const threadBActive = [3,4,7,8,11,12,15,16].includes(tick);
+  const raceAt = 8;
+  const hasRace = tick >= raceAt;
+  const expected = Math.min(tick, 10);
+  const actual = hasRace ? Math.max(1, expected - Math.floor((tick - raceAt) * 0.3)) : expected;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <p style={{ color: palette.muted, fontSize: 13, margin: 0, lineHeight: 1.6 }}>
+        Threads share memory — convenient but dangerous. The OS preempts them at any moment,
+        without asking. Without locks, two threads can corrupt shared state simultaneously.
+      </p>
+
+      <div style={{ border: `1px solid ${palette.border}`, borderRadius: 10, overflow: "hidden" }}>
+        <div style={{ padding: "8px 16px", background: palette.dim, fontSize: 10, color: palette.muted, letterSpacing: 2 }}>PROCESS — SHARED MEMORY SPACE</div>
+        <div style={{ padding: "12px 16px", display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+          {["heap (shared)", "globals (shared)", "code (shared)"].map(seg => (
+            <div key={seg} style={{ padding: "7px", background: `${palette.accent3}15`, border: `1px solid ${palette.accent3}44`, borderRadius: 6, textAlign: "center", fontSize: 10, color: palette.accent3, fontFamily: "monospace" }}>{seg}</div>
+          ))}
+        </div>
+        <div style={{ padding: "0 16px 16px", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+          {[
+            { name: "Thread 1", color: palette.accent, active: threadAActive, stack: "main → workerA()" },
+            { name: "Thread 2", color: palette.accent2, active: threadBActive, stack: "main → workerB()" },
+          ].map((t) => (
+            <div key={t.name} style={{
+              border: `2px solid ${t.active ? t.color : t.color + "33"}`,
+              borderRadius: 8, padding: 12,
+              background: t.active ? `${t.color}10` : "transparent",
+              transition: "all 0.25s",
+            }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: t.active ? t.color : palette.muted }}>{t.name}</span>
+                <span style={{ fontSize: 10, color: t.active ? t.color : palette.muted }}>{t.active ? "▶ running" : "⏸ preempted"}</span>
+              </div>
+              <div style={{ fontSize: 10, color: palette.muted, fontFamily: "monospace" }}>own stack:</div>
+              <div style={{ fontSize: 11, color: palette.text, fontFamily: "monospace", marginTop: 2 }}>{t.stack}</div>
+              <div style={{ fontSize: 10, color: palette.muted, fontFamily: "monospace", marginTop: 4 }}>own registers: PC, SP, ...</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{
+        border: `1px solid ${hasRace ? palette.accent2 + "88" : palette.border}`,
+        borderRadius: 10, padding: 16,
+        background: hasRace ? `${palette.accent2}08` : palette.panel,
+        transition: "all 0.4s"
+      }}>
+        <div style={{ fontSize: 10, color: palette.muted, letterSpacing: 2, marginBottom: 12 }}>RACE CONDITION: SHARED COUNTER</div>
+        <div style={{ fontFamily: "monospace", fontSize: 12, color: palette.muted, lineHeight: 1.8 }}>
+          <div><span style={{ color: palette.accent }}>T1:</span> reads counter → adds 1 → writes back</div>
+          <div><span style={{ color: palette.accent2 }}>T2:</span> reads counter → adds 1 → writes back</div>
+        </div>
+        <div style={{ marginTop: 10, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+          <div style={{ padding: "8px 12px", background: palette.bg, borderRadius: 6, display: "flex", justifyContent: "space-between" }}>
+            <span style={{ fontSize: 11, color: palette.muted }}>Expected</span>
+            <span style={{ fontFamily: "monospace", color: palette.accent4 }}>{expected}</span>
+          </div>
+          <div style={{ padding: "8px 12px", background: palette.bg, borderRadius: 6, display: "flex", justifyContent: "space-between" }}>
+            <span style={{ fontSize: 11, color: palette.muted }}>Actual</span>
+            <span style={{ fontFamily: "monospace", color: hasRace ? palette.accent2 : palette.text }}>{actual}{hasRace ? " ⚠" : ""}</span>
+          </div>
+        </div>
+        {hasRace && (
+          <div style={{ marginTop: 10, padding: "8px 12px", background: `${palette.accent2}15`, borderRadius: 6, fontSize: 11, color: palette.accent2 }}>
+            ⚠ Lost writes! Fix: wrap in <code style={{ background: palette.bg, padding: "1px 4px", borderRadius: 3 }}>mutex.lock()</code> / <code style={{ background: palette.bg, padding: "1px 4px", borderRadius: 3 }}>mutex.unlock()</code>
+          </div>
+        )}
+      </div>
+
+      <div style={{ display: "flex", gap: 8 }}>
+        <button onClick={() => { setTick(0); setRunning(false); }} style={{ flex: 1, padding: "8px", borderRadius: 6, border: `1px solid ${palette.border}`, background: palette.panel, color: palette.muted, cursor: "pointer", fontSize: 12 }}>↺ Reset</button>
+        <button onClick={() => { if (tick < maxTick) setTick(t => t + 1); }} style={{ flex: 1, padding: "8px", borderRadius: 6, border: `1px solid ${palette.border}`, background: palette.panel, color: palette.text, cursor: "pointer", fontSize: 12 }}>Step →</button>
+        <button onClick={() => { setTick(0); setRunning(true); }} style={{ flex: 1, padding: "8px", borderRadius: 6, border: `1px solid ${palette.accent2 + "44"}`, background: `${palette.accent2}15`, color: palette.accent2, cursor: "pointer", fontSize: 12 }}>▶ Run</button>
+      </div>
+    </div>
+  );
+}
+
+// ─── COMPARISON TABLE ─────────────────────────────────────────────────────────
+function ComparisonViz() {
+  const rows = [
+    { concept: "Process", memory: "Own isolated", scheduling: "OS preemptive", cost: "High", sharing: "IPC only", races: "No", color: palette.accent },
+    { concept: "Subprocess", memory: "Own isolated", scheduling: "OS preemptive", cost: "High", sharing: "IPC only", races: "No", color: palette.accent4 },
+    { concept: "Thread", memory: "Shared", scheduling: "OS preemptive", cost: "Medium", sharing: "Direct (unsafe)", races: "YES ⚠", color: palette.accent2 },
+    { concept: "Routine", memory: "Shared", scheduling: "Caller controls", cost: "~Zero", sharing: "Direct", races: "No", color: palette.accent5 },
+    { concept: "Coroutine", memory: "Shared", scheduling: "Cooperative (self)", cost: "Very low", sharing: "Direct (safe)", races: "No", color: palette.accent3 },
+  ];
+  const cols = ["concept", "memory", "scheduling", "cost", "sharing", "races"];
+  const labels = { concept: "Concept", memory: "Memory", scheduling: "Scheduling", cost: "Overhead", sharing: "Data Sharing", races: "Race Conditions" };
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <p style={{ color: palette.muted, fontSize: 13, margin: 0, lineHeight: 1.6 }}>
+        The whole evolution is trading isolation for efficiency — and cooperativeness for safety.
+      </p>
+      <div style={{ overflowX: "auto", borderRadius: 10, border: `1px solid ${palette.border}` }}>
+        <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12 }}>
+          <thead>
+            <tr>
+              {cols.map(c => (
+                <th key={c} style={{ padding: "10px 14px", textAlign: "left", background: palette.dim, color: palette.muted, fontSize: 10, letterSpacing: 1, borderBottom: `1px solid ${palette.border}`, whiteSpace: "nowrap" }}>
+                  {labels[c]}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, i) => (
+              <tr key={row.concept} style={{ background: i % 2 === 0 ? palette.panel : palette.bg }}>
+                {cols.map(col => (
+                  <td key={col} style={{
+                    padding: "10px 14px", borderBottom: `1px solid ${palette.border}`,
+                    color: col === "concept" ? row.color : col === "races" && row.races !== "No" ? palette.accent2 : palette.text,
+                    fontWeight: col === "concept" ? 700 : 400,
+                    fontFamily: col === "concept" ? "inherit" : "monospace",
+                    fontSize: col === "concept" ? 13 : 11,
+                    whiteSpace: "nowrap",
+                  }}>
+                    {row[col]}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8 }}>
+        {[
+          { title: "CPU-bound work", rec: "Threads or Processes", color: palette.accent2 },
+          { title: "I/O-bound concurrency", rec: "Coroutines / async", color: palette.accent3 },
+          { title: "Fault isolation", rec: "Separate Processes", color: palette.accent },
+        ].map(item => (
+          <div key={item.title} style={{ padding: 12, border: `1px solid ${item.color}33`, borderRadius: 8, background: `${item.color}08` }}>
+            <div style={{ fontSize: 10, color: palette.muted, marginBottom: 4 }}>{item.title}</div>
+            <div style={{ fontSize: 12, color: item.color, fontWeight: 600 }}>→ {item.rec}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── MAIN APP ─────────────────────────────────────────────────────────────────
+const VIEWS = {
+  "Process": ProcessViz,
+  "Subprocess": SubprocessViz,
+  "Routine": RoutineViz,
+  "Coroutine": CoroutineViz,
+  "Thread": ThreadViz,
+  "Compare All": ComparisonViz,
+};
+
+function App() {
+  const [active, setActive] = useState("Process");
+  const Component = VIEWS[active];
+
+  return (
+    <div style={{
+      minHeight: "100vh", background: palette.bg, color: palette.text,
+      fontFamily: "'IBM Plex Mono', 'Fira Code', 'Courier New', monospace",
+    }}>
+      <div style={{ borderBottom: `1px solid ${palette.border}`, padding: "20px 28px 0", background: palette.panel }}>
+        <div style={{ fontSize: 10, color: palette.muted, letterSpacing: 3, marginBottom: 4 }}>SYSTEMS CONCEPTS VISUALIZED</div>
+        <div style={{ fontSize: 20, fontWeight: 700, color: palette.text, marginBottom: 20, fontFamily: "'Space Grotesk', sans-serif", letterSpacing: -0.5 }}>
+          Processes · Threads · Routines · Coroutines
+        </div>
+        <div style={{ display: "flex", gap: 0, overflowX: "auto" }}>
+          {Object.keys(VIEWS).map(name => (
+            <button key={name} onClick={() => setActive(name)} style={{
+              padding: "8px 16px",
+              border: "none",
+              borderBottom: `2px solid ${active === name ? palette.accent : "transparent"}`,
+              background: "transparent",
+              color: active === name ? palette.accent : palette.muted,
+              cursor: "pointer",
+              fontSize: 12,
+              fontFamily: "inherit",
+              whiteSpace: "nowrap",
+              transition: "all 0.2s",
+            }}>{name}</button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ padding: "24px 28px", maxWidth: 800 }}>
+        <Component />
+      </div>
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+</script>
+</body>
+</html>
