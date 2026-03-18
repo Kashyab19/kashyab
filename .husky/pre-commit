@@ -1,0 +1,5 @@
+#!/bin/sh
+. ".husky/_/husky.sh"
+
+# Build the project
+npm run build || exit 1

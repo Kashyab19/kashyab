@@ -1,0 +1,46 @@
+:root {
+  --link-color: #2563eb;
+  --link-hover: #1d4ed8;
+  --text-tertiary: #666;
+}
+
+.dark {
+  --link-color: #60a5fa;
+  --link-hover: #93c5fd;
+  --text-tertiary: #b3b3b3;
+}
+
+.influence-link {
+  color: var(--link-color);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-size: 16px;
+  transition: color 0.2s ease;
+}
+
+.influence-link:hover {
+  color: var(--link-hover);
+}
+
+.section-item h2.section-title {
+  font-size: 13px;
+  margin-bottom: 16px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.text-tertiary {
+  color: var(--text-tertiary);
+  transition: color 0.2s ease;
+}
+
+@media (max-width: 768px) {
+  .influence-link {
+    font-size: 15px;
+  }
+
+  .section-item h2.section-title {
+    font-size: 12px;
+  }
+}
