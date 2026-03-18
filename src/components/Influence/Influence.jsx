@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { podcasts, podcastsUpdatedOn, people } from "../../data/personal.jsx";
+import { formatDate } from "../../utils/formatDate";
 import { useSEO } from "../../hooks/useSEO";
 import "./Influence.css";
 
@@ -9,20 +10,10 @@ function Influence() {
     description: "Podcasts and people that influence my thinking about systems, technology, and business.",
   });
   
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
   return (
     <main className="app-container">
-      <div style={{ marginBottom: "24px" }}>
-        <Link to="/" className="writings-link" style={{ fontSize: "16px" }}>
+      <div className="back-link-container">
+        <Link to="/" className="writings-link back-link">
           ← Home
         </Link>
       </div>
@@ -39,18 +30,17 @@ function Influence() {
         ) : (
           <ul className="section-list">
             {podcasts.map((podcast, index) => (
-              <li key={index} style={{ marginBottom: "12px" }}>
-                <a 
-                  href={podcast.url} 
-                  target="_blank" 
-                  rel="noreferrer" 
-                  className="link-external"
-                  style={{ fontSize: "16px" }}
+              <li key={index} className="influence-list-item">
+                <a
+                  href={podcast.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="link-external influence-link"
                 >
                   {podcast.name}
                 </a>
                 {podcast.description && (
-                  <span className="text-tertiary" style={{ marginLeft: "8px" }}>
+                  <span className="text-tertiary influence-description">
                     — {podcast.description}
                   </span>
                 )}
@@ -85,7 +75,7 @@ function Influence() {
                   person.name
                 )}
                 {person.description && (
-                  <span className="text-tertiary" style={{ marginLeft: "8px" }}>
+                  <span className="text-tertiary influence-description">
                     — {person.description}
                   </span>
                 )}
@@ -96,9 +86,9 @@ function Influence() {
       </section>
 
       {podcastsUpdatedOn && (
-        <div style={{ marginTop: "24px" }}>
-          <span className="text-tertiary" style={{ fontSize: "15px" }}>Updated on </span>
-          <span className="text-tertiary" style={{ fontSize: "15px", fontVariantNumeric: "tabular-nums" }}>
+        <div className="influence-updated">
+          <span className="text-tertiary influence-updated-text">Updated on </span>
+          <span className="text-tertiary influence-updated-date">
             {formatDate(podcastsUpdatedOn)}
           </span>
         </div>

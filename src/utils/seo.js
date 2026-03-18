@@ -3,8 +3,8 @@ export const siteConfig = {
   name: "Kashyab Murali",
   title: "Kashyab Murali - Backend Engineer & Systems Thinker",
   description: "I study systems. Whether it is history, economics, or computer science, I am obsessed with how complex parts fit together to function as a whole. I take this understanding of broad mechanics and apply it to backend engineering.",
-  url: "https://kashyab.xyz", // Update with your actual domain
-  image: "https://kashyabmurali.com/og-image.jpg", // Update with your actual OG image
+  url: "https://kashyab.xyz",
+  image: "https://kashyab.xyz/og-image.jpg",
   twitter: "@karpathism",
 };
 

@@ -65,11 +65,11 @@ export default function AIGarden() {
        Inspired from a tweet, I assigned Claude Code a safe space to express itself and decided that I should build a dedicated digital garden. Here are some of the things CC came up with. If I find the tweet again, I will add it here.
       </p>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "2rem", marginTop: "2rem" }}>
+      <div className="ai-garden-list">
         {artifacts.map((artifact) => (
           <div key={artifact.title} className="ai-garden-card">
             <h2 className="section-title">{artifact.title}</h2>
-            <p className="text-body" style={{ marginBottom: "0.75rem" }}>{artifact.description}</p>
+            <p className="text-body ai-garden-description">{artifact.description}</p>
             <iframe
               src={artifact.src}
               title={artifact.title}

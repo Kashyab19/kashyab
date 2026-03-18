@@ -1,5 +1,4 @@
 // src/components/MableResources.js
-import React from "react";
 import { Badge } from "@/components/ui/badge";
 
 const resources = [
@@ -38,6 +37,7 @@ const MableResources = () => {
     href="https://hackmd.io/@ZlHUP-dGQNSoVw-1ixAd6A/B1MJEIZ4Je#Descriptive-texts-in-links-can-help-improve-SEO"
     className="text-blue-600 hover:underline font-medium"
     target="_blank"
+    rel="noreferrer"
   >
     Kashyab's Mable Case Study
   </a>
@@ -66,7 +66,7 @@ const MableResources = () => {
             </div>
             <p className="leading-2 mt-4">
               <strong>Description:</strong>{" "}
-              <span dangerouslySetInnerHTML={{ __html: resource.description }} />
+              {resource.description}
             </p>
             <p className="leading-2 mt-4">
               <strong>Responsibilities:</strong> {resource.type}

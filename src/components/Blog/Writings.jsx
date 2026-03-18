@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { getAllPosts } from "../../utils/posts";
+import { formatDate } from "../../utils/formatDate";
 import { useSEO } from "../../hooks/useSEO";
 import "./Blog.css";
 
@@ -11,20 +12,10 @@ function Writings() {
     description: "Thoughts on systems, technology, and the intersection of engineering and economics.",
   });
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
   return (
     <main className="app-container">
-      <div style={{ marginBottom: "24px" }}>
-        <Link to="/" className="writings-link" style={{ fontSize: "16px" }}>
+      <div className="back-link-container">
+        <Link to="/" className="writings-link back-link">
           ← Home
         </Link>
       </div>

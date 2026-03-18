@@ -93,6 +93,7 @@
 }
 
 .post-date {
+  margin-bottom: 32px;
   font-size: 15px;
   color: var(--text-tertiary);
   transition: color 0.2s ease;
@@ -200,11 +201,17 @@
   display: flex;
   justify-content: space-between;
   gap: 16px;
+  margin-top: 48px;
+  padding-top: 32px;
 }
 
 .post-navigation-border {
   border-top: 1px solid var(--border-color);
   transition: border-color 0.2s ease;
+}
+
+.post-nav-next {
+  margin-left: auto;
 }
 
 @media (max-width: 768px) {

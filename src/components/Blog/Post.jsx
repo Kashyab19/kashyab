@@ -1,27 +1,28 @@
 import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { getPostBySlug, getAllPosts } from "../../utils/posts";
+import { getAllPosts } from "../../utils/posts";
+import { formatDate } from "../../utils/formatDate";
 import { useSEO } from "../../hooks/useSEO";
 import "./Blog.css";
 
 function Post() {
   const { slug } = useParams();
-  const post = getPostBySlug(slug);
-  
+  const allPosts = getAllPosts();
+  const currentIndex = allPosts.findIndex(p => p.slug === slug);
+  const post = currentIndex !== -1 ? allPosts[currentIndex] : null;
+
   // Extract description from post content for SEO
-  const postDescription = post?.content 
-    ? post.content.split("\n\n")[0]?.replace(/[#*`]/g, "").trim().substring(0, 160) 
+  const postDescription = post?.content
+    ? post.content.split("\n\n")[0]?.replace(/[#*`]/g, "").trim().substring(0, 160)
     : "Read this article on systems, technology, and engineering.";
-  
+
   useSEO({
     title: post?.title || "Post",
     description: postDescription,
     type: "article",
     postSlug: post ? slug : null,
   });
-  const allPosts = getAllPosts();
-  const currentIndex = allPosts.findIndex(p => p.slug === slug);
   const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : null;
   const nextPost = currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : null;
 
@@ -36,20 +37,10 @@ function Post() {
     );
   }
 
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
-  };
-
   return (
     <main className="app-container">
-      <div style={{ marginBottom: "24px" }}>
-        <Link to="/writings" className="writings-link" style={{ fontSize: "16px" }}>
+      <div className="back-link-container">
+        <Link to="/writings" className="writings-link back-link">
           ← Writings
         </Link>
       </div>
@@ -57,7 +48,7 @@ function Post() {
       <article className="post-content">
         <h1 className="heading-large">{post.title}</h1>
         {post.date && (
-          <p className="post-date" style={{ marginBottom: "32px", fontSize: "15px" }}>
+          <p className="post-date">
             {formatDate(post.date)}
           </p>
         )}
@@ -69,14 +60,14 @@ function Post() {
         </div>
       </article>
 
-      <nav className="post-navigation post-navigation-border" style={{ marginTop: "48px", paddingTop: "32px" }}>
+      <nav className="post-navigation post-navigation-border">
         {prevPost && (
           <Link to={`/${prevPost.slug}`} className="writings-link">
             ← {prevPost.title}
           </Link>
         )}
         {nextPost && (
-          <Link to={`/${nextPost.slug}`} className="writings-link" style={{ marginLeft: "auto" }}>
+          <Link to={`/${nextPost.slug}`} className="writings-link post-nav-next">
             {nextPost.title} →
           </Link>
         )}

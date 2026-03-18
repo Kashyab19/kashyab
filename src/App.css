@@ -615,7 +615,53 @@ a:hover {
   }
 }
 
+/* Back link */
+.back-link-container {
+  margin-bottom: 24px;
+}
+
+.back-link {
+  font-size: 16px;
+}
+
+/* Influence */
+.influence-list-item {
+  margin-bottom: 12px;
+}
+
+.influence-link {
+  font-size: 16px;
+}
+
+.influence-description {
+  margin-left: 8px;
+}
+
+.influence-updated {
+  margin-top: 24px;
+}
+
+.influence-updated-text {
+  font-size: 15px;
+}
+
+.influence-updated-date {
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+}
+
 /* AI Garden */
+.ai-garden-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.ai-garden-description {
+  margin-bottom: 0.75rem;
+}
+
 .ai-garden-card {
   border: 1px solid var(--border-color);
   border-radius: 8px;
