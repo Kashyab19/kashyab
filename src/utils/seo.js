@@ -57,10 +57,26 @@ export function updateSEO({ title, description, image, url, type = "website" }) 
   canonical.setAttribute("href", fullUrl);
 }
 
-export function generateStructuredData({ type, title, description, datePublished, dateModified, author, url }) {
-  const baseStructuredData = {
+const personId = `${siteConfig.url}/#person`;
+
+export function generateStructuredData({ type, title, description, datePublished, dateModified, url }) {
+  if (type === "BlogPosting") {
+    return {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: title,
+      description: description,
+      author: { "@id": personId },
+      datePublished: datePublished,
+      dateModified: dateModified || datePublished,
+      url: url,
+    };
+  }
+
+  return {
     "@context": "https://schema.org",
-    "@type": type || "Person",
+    "@type": "Person",
+    "@id": personId,
     name: siteConfig.name,
     url: siteConfig.url,
     sameAs: [
@@ -70,22 +86,4 @@ export function generateStructuredData({ type, title, description, datePublished
       "https://thefirstderivative.substack.com/",
     ],
   };
-
-  if (type === "BlogPosting") {
-    return {
-      "@context": "https://schema.org",
-      "@type": "BlogPosting",
-      headline: title,
-      description: description,
-      author: {
-        "@type": "Person",
-        name: siteConfig.name,
-      },
-      datePublished: datePublished,
-      dateModified: dateModified || datePublished,
-      url: url,
-    };
-  }
-
-  return baseStructuredData;
 }

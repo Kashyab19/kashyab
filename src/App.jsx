@@ -1,11 +1,13 @@
 import { lazy, Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route, Link, NavLink } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import "./App.css";
 import profileImage from "./assets/kashyab-murali.webp";
 import { personalInfo, works, projects, beliefs, navLinks } from "./data/personal.jsx";
 import { useTheme } from "./contexts/ThemeContext";
 import { useSEO } from "./hooks/useSEO";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 // Footer icons
 const footerIcons = {
@@ -41,9 +43,6 @@ const footerIcons = {
   ),
 };
 
-const SpeedInsights = lazy(() =>
-  import("@vercel/speed-insights/react").then((module) => ({ default: module.SpeedInsights }))
-);
 const MableResources = lazy(() => import("./components/Library/MableResources"));
 const Writings = lazy(() => import("./components/Blog/Writings"));
 const Post = lazy(() => import("./components/Blog/Post"));
@@ -164,7 +163,8 @@ function Home() {
         <ul className="section-list">
           {works.map((work, index) => (
             <li key={index}>
-              <a href={work.url} target="_blank" rel="noreferrer" className="link-external">{work.title}</a> — {work.description}
+              <a href={work.url} target="_blank" rel="noreferrer" className="link-external">{work.title}</a>
+              <span className="work-desc">{work.description}</span>
             </li>
           ))}
         </ul>
@@ -183,10 +183,12 @@ function Home() {
           {projects.map((project, index) => (
             <li key={index}>
               <a href={project.url} target="_blank" rel="noreferrer" className="link-external">{project.title}</a>
-              {project.wip && <span className="pill">WIP</span>}
-              {project.type === "mini" && <span className="pill">Mini app</span>}
-              <span className="pill">{project.year}</span>
-              <span className="project-desc"> — {project.description}</span>
+              <span className="project-pills">
+                {project.wip && <span className="pill">WIP</span>}
+                {project.type === "mini" && <span className="pill">Mini app</span>}
+                <span className="pill">{project.year}</span>
+              </span>
+              <span className="project-desc">{project.description}</span>
             </li>
           ))}
         </ul>
@@ -209,6 +211,7 @@ export default function App() {
     <Router>
       <div className="app-wrapper">
         <Header />
+        <ErrorBoundary>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
@@ -262,11 +265,10 @@ export default function App() {
             }
           />
         </Routes>
+        </ErrorBoundary>
         <Footer />
         <Analytics />
-        <Suspense fallback={null}>
-          <SpeedInsights />
-        </Suspense>
+        <SpeedInsights />
       </div>
     </Router>
   );

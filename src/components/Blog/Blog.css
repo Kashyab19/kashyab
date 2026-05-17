@@ -30,10 +30,33 @@
 
 .writings-item {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 24px;
-  margin-bottom: 20px;
+  margin-bottom: 28px;
   padding: 0;
+}
+
+.writings-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.writings-title-row {
+  line-height: 1.4;
+}
+
+.writings-title-row .writings-tags {
+  display: inline-flex;
+  vertical-align: baseline;
+  margin-left: 12px;
+}
+
+.writings-subtitle {
+  margin: 4px 0 0 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-tertiary);
+  transition: color 0.2s ease;
 }
 
 .writings-date {
@@ -97,6 +120,21 @@
   font-size: 15px;
   color: var(--text-tertiary);
   transition: color 0.2s ease;
+}
+
+.post-meta {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: var(--text-tertiary);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.2s ease;
+}
+
+.post-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 32px;
 }
 
 .markdown-content {
@@ -177,6 +215,68 @@
   padding: 0;
 }
 
+/* Prism syntax highlighting — minimal palette using the site's variables.
+   Light/dark are handled by overrides under .dark. */
+.markdown-content code[class*="language-"],
+.markdown-content pre[class*="language-"] {
+  font-family: 'Monaco', 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  background: transparent;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata { color: var(--text-tertiary); font-style: italic; }
+.token.punctuation { color: var(--text-secondary); }
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol { color: #b45309; }
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin { color: #047857; }
+.token.operator,
+.token.entity,
+.token.url,
+.token.atrule,
+.token.attr-value,
+.token.keyword { color: #6d28d9; }
+.token.function,
+.token.class-name { color: #1d4ed8; }
+.token.regex,
+.token.important,
+.token.variable { color: #be185d; }
+
+.dark .token.property,
+.dark .token.tag,
+.dark .token.boolean,
+.dark .token.number,
+.dark .token.constant,
+.dark .token.symbol { color: #fbbf24; }
+.dark .token.selector,
+.dark .token.attr-name,
+.dark .token.string,
+.dark .token.char,
+.dark .token.builtin { color: #6ee7b7; }
+.dark .token.operator,
+.dark .token.entity,
+.dark .token.url,
+.dark .token.atrule,
+.dark .token.attr-value,
+.dark .token.keyword { color: #c4b5fd; }
+.dark .token.function,
+.dark .token.class-name { color: #93c5fd; }
+.dark .token.regex,
+.dark .token.important,
+.dark .token.variable { color: #f9a8d4; }
+
 .markdown-content a {
   color: var(--link-color);
   text-decoration: underline;
@@ -218,20 +318,48 @@
   .writings-item {
     flex-direction: column;
     gap: 4px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
   }
 
   .writings-date {
     min-width: auto;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .writings-title {
-    font-size: 15px;
+    font-size: 16px;
   }
 
   .writings-link {
     font-size: 15px;
+  }
+
+  /* Stack tags on their own line under the title — inline wrapping
+     with 3+ pills gets uneven and noisy on narrow screens. */
+  .writings-title-row .writings-tags {
+    display: flex;
+    margin-left: 0;
+    margin-top: 6px;
+    gap: 6px;
+  }
+
+  .writings-tag {
+    font-size: 11px;
+    padding: 1px 6px;
+  }
+
+  .writings-subtitle {
+    font-size: 13px;
+    margin-top: 6px;
+  }
+
+  .post-meta {
+    font-size: 13px;
+  }
+
+  .post-tags {
+    gap: 5px;
+    margin-bottom: 24px;
   }
 
   .markdown-content {

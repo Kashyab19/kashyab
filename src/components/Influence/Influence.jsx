@@ -1,15 +1,86 @@
 import { Link } from "react-router-dom";
-import { podcasts, podcastsUpdatedOn, people } from "../../data/personal.jsx";
+import {
+  podcasts,
+  podcastsUpdatedOn,
+  books,
+  articles,
+  people,
+} from "../../data/personal.jsx";
 import { formatDate } from "../../utils/formatDate";
 import { useSEO } from "../../hooks/useSEO";
 import "./Influence.css";
 
+// Returns [[year, items], ...] sorted newest first.
+// "Undated" bucket (entries without a year) sinks to the bottom.
+function groupByYear(items) {
+  const groups = items.reduce((acc, item) => {
+    const key = item.year ?? "Undated";
+    if (!acc[key]) acc[key] = [];
+    acc[key].push(item);
+    return acc;
+  }, {});
+  return Object.entries(groups).sort(([a], [b]) => {
+    if (a === "Undated") return 1;
+    if (b === "Undated") return -1;
+    return Number(b) - Number(a);
+  });
+}
+
+function InfluenceList({ items, renderItem, emptyText }) {
+  if (items.length === 0) {
+    return <p className="text-body influence-empty">{emptyText}</p>;
+  }
+
+  const groups = groupByYear(items);
+  const showYearHeaders = groups.length > 1;
+
+  return (
+    <>
+      {groups.map(([year, entries]) => (
+        <div key={year} className="influence-year-group">
+          {showYearHeaders && <h3 className="influence-year-header">{year}</h3>}
+          <ul className="section-list">
+            {entries.map((item, i) => (
+              <li key={`${year}-${i}`} className="influence-list-item">
+                {renderItem(item)}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </>
+  );
+}
+
+function Takeaway({ text }) {
+  if (!text) return null;
+  return <span className="text-tertiary influence-description">— {text}</span>;
+}
+
+function renderLinked(item, labelKey) {
+  const label = item[labelKey];
+  if (item.url) {
+    return (
+      <a
+        href={item.url}
+        target="_blank"
+        rel="noreferrer"
+        className="link-external influence-link"
+      >
+        {label}
+      </a>
+    );
+  }
+  return <span className="influence-link-plain">{label}</span>;
+}
+
 function Influence() {
   useSEO({
     title: "Influence",
-    description: "Podcasts and people that influence my thinking about systems, technology, and business.",
+    description:
+      "Podcasts, books, articles, and people that shaped my thinking about systems, technology, and business.",
   });
-  
+
   return (
     <main className="app-container">
       <div className="back-link-container">
@@ -18,71 +89,73 @@ function Influence() {
         </Link>
       </div>
       <h2 className="page-heading">Influence</h2>
-      
+
       <section className="section-item">
         <h2 className="section-title">Podcasts</h2>
         <p className="text-body">
-          Charlie Munger read voraciously to build his mental models. I try to implement the same in my life by listening to podcasts. Auditory learns helps me absorb the information better. Although, I am trying to read a lot more these days.
+          Charlie Munger read voraciously to build his mental models. I try to implement the same in my life by listening to podcasts. Auditory learning helps me absorb the information better. Although, I am trying to read a lot more these days.
         </p>
-        
-        {podcasts.length === 0 ? (
-          <p className="text-body">No podcasts listed yet.</p>
-        ) : (
-          <ul className="section-list">
-            {podcasts.map((podcast, index) => (
-              <li key={index} className="influence-list-item">
-                <a
-                  href={podcast.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="link-external influence-link"
-                >
-                  {podcast.name}
-                </a>
-                {podcast.description && (
-                  <span className="text-tertiary influence-description">
-                    — {podcast.description}
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+        <InfluenceList
+          items={podcasts}
+          emptyText="No podcasts listed yet."
+          renderItem={(podcast) => (
+            <>
+              {renderLinked(podcast, "name")}
+              <Takeaway text={podcast.takeaway} />
+            </>
+          )}
+        />
       </section>
 
       <section className="section-item">
-        <h2 className="section-title">People</h2>
-        <p className="text-body">
-          A non-exhaustive list of people whose work and thinking I look up to.
-        </p>
+        <h2 className="section-title">Books</h2>
+        <InfluenceList
+          items={books}
+          emptyText="Building this list. Check back."
+          renderItem={(book) => (
+            <>
+              {renderLinked(book, "title")}
+              {book.author && (
+                <span className="influence-meta"> by {book.author}</span>
+              )}
+              <Takeaway text={book.takeaway} />
+            </>
+          )}
+        />
+      </section>
 
-        {people.length === 0 ? (
-          <p className="text-body">I am still putting this list together.</p>
-        ) : (
-          <ul className="section-list">
-            {people.map((person, index) => (
-              <li key={index}>
-                {person.url ? (
-                  <a
-                    href={person.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="link-external"
-                  >
-                    {person.name}
-                  </a>
-                ) : (
-                  person.name
-                )}
-                {person.description && (
-                  <span className="text-tertiary influence-description">
-                    — {person.description}
-                  </span>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
+      <section className="section-item">
+        <h2 className="section-title">Articles</h2>
+        <InfluenceList
+          items={articles}
+          emptyText="Building this list. Check back."
+          renderItem={(article) => (
+            <>
+              {renderLinked(article, "title")}
+              {article.source && (
+                <span className="influence-meta"> · {article.source}</span>
+              )}
+              <Takeaway text={article.takeaway} />
+            </>
+          )}
+        />
+      </section>
+
+      <section className="section-item">
+        <h2 className="section-title">Ideas I owe to people</h2>
+        <p className="text-body">
+          A non-exhaustive list of people whose thinking I&apos;ve absorbed.
+        </p>
+        <InfluenceList
+          items={people}
+          emptyText="I am still putting this list together."
+          renderItem={(person) => (
+            <>
+              {renderLinked(person, "name")}
+              <Takeaway text={person.takeaway} />
+            </>
+          )}
+        />
       </section>
 
       {podcastsUpdatedOn && (
@@ -98,4 +171,3 @@ function Influence() {
 }
 
 export default Influence;
-

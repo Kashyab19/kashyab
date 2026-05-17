@@ -1,0 +1,66 @@
+.mable-banner {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+.mable-banner-tag {
+  color: var(--text-tertiary);
+  font-weight: 400;
+}
+
+.mable-case-study {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.mable-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 640px) {
+  .mable-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.mable-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  padding: 16px;
+  border-radius: 8px;
+}
+
+.mable-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.mable-card-title {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0;
+}
+
+.mable-card-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 8px 0 0 0;
+}

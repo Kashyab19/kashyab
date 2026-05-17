@@ -1,81 +1,65 @@
-// Script to generate sitemap.xml dynamically
-// Run with: node scripts/generate-sitemap.js
+// Generates public/sitemap.xml from static routes + src/posts/*.md frontmatter.
+// Runs automatically before `vite build` via the prebuild npm script.
 
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, readdirSync, writeFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const baseUrl = 'https://kashyabmurali.com'; // Update with your domain
+const baseUrl = 'https://kashyab.xyz';
 const postsDir = join(__dirname, '../src/posts');
+const outputPath = join(__dirname, '../public/sitemap.xml');
 
-// Get all markdown files
-import { glob } from 'glob';
+const staticRoutes = [
+  { path: '/', changefreq: 'weekly', priority: '1.0' },
+  { path: '/writings', changefreq: 'weekly', priority: '0.8' },
+  { path: '/influence', changefreq: 'monthly', priority: '0.7' },
+  { path: '/claurden', changefreq: 'monthly', priority: '0.5' },
+];
 
-async function generateSitemap() {
-  const posts = [];
-  
-  try {
-    const files = await glob('src/posts/*.md');
-    
-    for (const file of files) {
-      const content = readFileSync(join(__dirname, '..', file), 'utf-8');
-      const slug = file.split('/').pop().replace('.md', '');
-      
-      // Extract date from frontmatter
-      const dateMatch = content.match(/date:\s*["']?([^"'\n]+)["']?/);
-      const date = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];
-      
-      posts.push({
-        slug,
-        date,
-      });
-    }
-  } catch (error) {
-    console.log('No posts found or error reading posts:', error.message);
-  }
+const today = new Date().toISOString().split('T')[0];
 
-  const currentDate = new Date().toISOString().split('T')[0];
-  
-  let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>${baseUrl}/</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/writings</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>${baseUrl}/influence</loc>
-    <lastmod>${currentDate}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>`;
-
-  // Add blog posts
-  posts.forEach(post => {
-    sitemap += `
-  <url>
-    <loc>${baseUrl}/${post.slug}</loc>
-    <lastmod>${post.date}</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>`;
+const posts = readdirSync(postsDir)
+  .filter((file) => file.endsWith('.md'))
+  .map((file) => {
+    const content = readFileSync(join(postsDir, file), 'utf-8');
+    const dateMatch = content.match(/^date:\s*["']?([^"'\n]+)["']?/m);
+    return {
+      slug: file.replace(/\.md$/, ''),
+      date: dateMatch ? dateMatch[1].trim() : today,
+    };
   });
 
-  sitemap += `
-</urlset>`;
+const urlEntries = [
+  ...staticRoutes.map((route) => ({
+    loc: `${baseUrl}${route.path === '/' ? '/' : route.path}`,
+    lastmod: today,
+    changefreq: route.changefreq,
+    priority: route.priority,
+  })),
+  ...posts.map((post) => ({
+    loc: `${baseUrl}/${post.slug}`,
+    lastmod: post.date,
+    changefreq: 'monthly',
+    priority: '0.6',
+  })),
+];
 
-  writeFileSync(join(__dirname, '../public/sitemap.xml'), sitemap);
-  console.log(`✅ Sitemap generated with ${posts.length} posts`);
-}
+const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urlEntries
+  .map(
+    (e) => `  <url>
+    <loc>${e.loc}</loc>
+    <lastmod>${e.lastmod}</lastmod>
+    <changefreq>${e.changefreq}</changefreq>
+    <priority>${e.priority}</priority>
+  </url>`
+  )
+  .join('\n')}
+</urlset>
+`;
 
-generateSitemap().catch(console.error);
+writeFileSync(outputPath, xml);
+console.log(`Sitemap written: ${urlEntries.length} URLs (${posts.length} posts)`);
