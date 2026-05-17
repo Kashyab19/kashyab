@@ -1,11 +1,5 @@
-import { useLayoutEffect, useRef } from "react";
+import { useLayoutEffect } from "react";
 import { useSEO } from "../hooks/useSEO";
-
-function scrollToTop() {
-  window.scrollTo(0, 0);
-  document.documentElement.scrollTop = 0;
-  document.body.scrollTop = 0;
-}
 
 const artifacts = [
   {
@@ -26,39 +20,25 @@ const artifacts = [
 ];
 
 export default function AIGarden() {
-  const mainRef = useRef(null);
-
   useSEO({
     title: "AI Garden - Kashyab Murali",
     description: "Interactive HTML creations — particle systems, visual synths, and more.",
   });
 
+  // Iframes load async and can push the scroll position down once their
+  // content lays out. Disable browser scroll restoration and pin to the top
+  // synchronously after layout.
   useLayoutEffect(() => {
     const prevRestoration = history.scrollRestoration;
     history.scrollRestoration = "manual";
-    scrollToTop();
-    mainRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
-    const rafId = requestAnimationFrame(() => {
-      scrollToTop();
-      mainRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
-      requestAnimationFrame(() => {
-        scrollToTop();
-        mainRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
-      });
-    });
-    const t = setTimeout(() => {
-      scrollToTop();
-      mainRef.current?.scrollIntoView({ block: "start", behavior: "instant" });
-    }, 100);
+    window.scrollTo(0, 0);
     return () => {
-      cancelAnimationFrame(rafId);
-      clearTimeout(t);
       history.scrollRestoration = prevRestoration;
     };
   }, []);
 
   return (
-    <main ref={mainRef} className="app-container">
+    <main className="app-container">
       <h1 className="heading-large">The Claurden</h1>
       <br />
       <p className="text-body">
@@ -74,7 +54,8 @@ export default function AIGarden() {
               src={artifact.src}
               title={artifact.title}
               className="ai-garden-iframe"
-              sandbox="allow-scripts allow-same-origin"
+              sandbox="allow-scripts"
+              loading="lazy"
             />
           </div>
         ))}

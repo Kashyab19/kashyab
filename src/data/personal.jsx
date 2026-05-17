@@ -156,31 +156,61 @@ export const navLinks = [
   },
 ];
 
+// Influence — what shaped my thinking. Each entry has an optional `takeaway`:
+// the one-line thing I actually got from it. Better than a description.
+// Year-grouping kicks in automatically when a section spans 2+ years.
+
 export const podcasts = [
   {
     name: "The Founders by David Senra",
     url: "https://open.spotify.com/show/7txiovdzPARhjm18NwMUYj",
+    year: 2025,
+    takeaway: "", // TODO: what did this give you?
   },
   {
     name: "Morning Brew Daily by Morning Brew",
-    url: "https://open.spotify.com/show/7nc7OQdPTekErtFSRxOBKh"
+    url: "https://open.spotify.com/show/7nc7OQdPTekErtFSRxOBKh",
+    year: 2025,
+    takeaway: "",
   },
   {
     name: "Dwarkesh Podcast by Dwarkesh Patel",
     url: "https://open.spotify.com/show/4JH4tybY1zX6e5hjCwU6gF",
+    year: 2025,
+    takeaway: "",
   },
 ];
 
 export const podcastsUpdatedOn = "2025-02-24";
 
-// People you look up to (fill this list in over time)
+export const books = [
+  {
+    title: "Outliers: The Story of Success",
+    author: "Malcolm Gladwell",
+    url: "",
+    year: null, // TODO: when did you read it?
+    takeaway: "", // TODO: what did you take from it?
+  },
+  {
+    title: "Elon Musk",
+    author: "Walter Isaacson",
+    url: "",
+    year: null,
+    takeaway: "",
+  },
+];
+
+export const articles = [
+  // { title: "", source: "", url: "", year: 2025, takeaway: "" },
+];
+
+// "Ideas I owe to people" — takeaway is what they taught me, not a description.
 export const people = [
-  // Example:
-  { name: "Murali Seshadri", reason: "25 years of building a great small business" },
-  { name: "Charlie Munger", reason: "Mental models, clear thinking, long-termism." },
-  { name: "Naval Ravikant", reason: "Building a company that lasts" },
-  { name: "David Senra", reason: "Storytelling and compounded my learning speed" },
-  { name: "Jagannath Ramesh", reason: "Stands by my side silently through my journey" },
+  { name: "Murali Seshadri", takeaway: "25 years of building a great small business" },
+  { name: "Charlie Munger", takeaway: "Mental models, clear thinking, long-termism." },
+  { name: "Naval Ravikant", takeaway: "Building a company that lasts" },
+  { name: "David Senra", takeaway: "Storytelling and compounded my learning speed" },
+  { name: "Jagannath Ramesh", takeaway: "Stands by my side silently through my journey" },
 ];
 
 export const videos = [

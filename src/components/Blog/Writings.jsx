@@ -34,9 +34,23 @@ function Writings() {
             return (
               <li key={post.slug} className="writings-item">
                 <span className="writings-date">{formattedDate || "—"}</span>
-                <Link to={`/${post.slug}`} className="writings-title">
-                  {post.title}
-                </Link>
+                <div className="writings-body">
+                  <div className="writings-title-row">
+                    <Link to={`/${post.slug}`} className="writings-title">
+                      {post.title}
+                    </Link>
+                    {post.tags.length > 0 && (
+                      <span className="writings-tags">
+                        {post.tags.map((tag) => (
+                          <span key={tag} className="writings-tag">{tag}</span>
+                        ))}
+                      </span>
+                    )}
+                  </div>
+                  {post.subtitle && (
+                    <p className="writings-subtitle">{post.subtitle}</p>
+                  )}
+                </div>
               </li>
             );
           })}
