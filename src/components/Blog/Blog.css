@@ -19,6 +19,292 @@
   --border-quote: var(--border-color, #333);
 }
 
+.writing-page {
+  width: min(var(--page-width), calc(100% - 48px));
+  margin: 0 auto;
+  padding: 64px 0 96px;
+}
+
+.writing-intro {
+  max-width: 760px;
+  padding: 34px 0 96px;
+}
+
+.writing-intro-kicker,
+.writing-theme {
+  margin: 0;
+  color: var(--signal-color);
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.writing-intro h1 {
+  max-width: 680px;
+  margin: 18px 0 22px;
+  font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-size: 54px;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.writing-intro > p:not(.writing-intro-kicker) {
+  max-width: 670px;
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 18px;
+  line-height: 1.75;
+}
+
+.writing-substack-link,
+.start-here-link,
+.writing-follow a {
+  display: inline-block;
+  margin-top: 28px;
+  color: var(--link-color);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.writing-substack-link:hover,
+.start-here-link:hover,
+.writing-follow a:hover {
+  text-decoration: underline;
+}
+
+.writing-page-section {
+  padding: 72px 0 92px;
+  border-top: 1px solid var(--border-color);
+}
+
+.writing-page-heading {
+  display: grid;
+  grid-template-columns: 34px auto 1fr;
+  gap: 14px;
+  align-items: baseline;
+  margin-bottom: 42px;
+}
+
+.writing-page-heading > span {
+  color: var(--text-tertiary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.writing-page-heading h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+
+.writing-page-heading p {
+  justify-self: end;
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: 13px;
+}
+
+.start-here-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+
+.start-here-item > a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.start-here-image {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 22px;
+  overflow: hidden;
+  background: var(--bg-tertiary);
+}
+
+.start-here-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 280ms ease;
+}
+
+.start-here-item a:hover .start-here-image img {
+  transform: scale(1.025);
+}
+
+.start-here-image span {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.start-here-item h3 {
+  margin: 10px 0 10px;
+  font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-size: 22px;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.start-here-note {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+.start-here-link {
+  margin-top: 18px;
+}
+
+.writing-archive-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--border-color);
+}
+
+.writing-archive-item {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.writing-archive-item > a {
+  display: grid;
+  grid-template-columns: 135px minmax(0, 1fr) 24px;
+  gap: 28px;
+  align-items: start;
+  padding: 27px 0;
+  color: inherit;
+  text-decoration: none;
+}
+
+.writing-archive-item time {
+  color: var(--text-tertiary);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.writing-archive-copy h3 {
+  margin: 7px 0 5px;
+  font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-size: 21px;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.writing-archive-copy > p:not(.writing-theme) {
+  margin: 0;
+  color: var(--text-tertiary);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.writing-archive-item .external-arrow {
+  color: var(--link-color);
+}
+
+.writing-follow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 56px 0 8px;
+  border-top: 1px solid var(--border-color);
+}
+
+.writing-follow p {
+  max-width: 590px;
+  margin: 0;
+  font-family: ui-serif, "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+  font-size: 22px;
+  line-height: 1.45;
+}
+
+.writing-follow a {
+  margin-top: 0;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .writing-page {
+    width: calc(100% - 40px);
+    padding: 40px 0 72px;
+  }
+
+  .writing-intro {
+    padding: 28px 0 70px;
+  }
+
+  .writing-intro h1 {
+    font-size: 40px;
+  }
+
+  .writing-intro > p:not(.writing-intro-kicker) {
+    font-size: 16px;
+  }
+
+  .writing-page-section {
+    padding: 58px 0 70px;
+  }
+
+  .writing-page-heading {
+    grid-template-columns: 30px 1fr;
+    margin-bottom: 32px;
+  }
+
+  .writing-page-heading p {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .start-here-grid {
+    grid-template-columns: 1fr;
+    gap: 42px;
+  }
+
+  .start-here-item h3 {
+    font-size: 24px;
+  }
+
+  .writing-archive-item > a {
+    grid-template-columns: minmax(0, 1fr) 20px;
+    gap: 12px;
+  }
+
+  .writing-archive-item time {
+    grid-column: 1 / -1;
+  }
+
+  .writing-follow {
+    display: block;
+    padding-top: 44px;
+  }
+
+  .writing-follow p {
+    font-size: 20px;
+  }
+
+  .writing-follow a {
+    margin-top: 18px;
+  }
+}
+
 /* Page heading moved to App.css as .page-heading for consistency */
 
 .writings-list {

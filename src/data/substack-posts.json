@@ -1,0 +1,142 @@
+[
+  {
+    "title": "Reverse Engineering The Steer Mode",
+    "description": "Can long-running tasks in Codex be interrupted?",
+    "url": "https://thefirstderivative.substack.com/p/reverse-engineering-the-steer-mode",
+    "date": "2026-07-12T16:03:53.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!xlcb!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F243fdb99-4495-48f0-88b6-f0198184a8e4_792x452.webp"
+  },
+  {
+    "title": "The Machine Inside The Machine",
+    "description": "If you have ever handed a task to an AI agent and wondered what actually happens next, this one's for you.",
+    "url": "https://thefirstderivative.substack.com/p/the-machine-inside-the-machine",
+    "date": "2026-07-05T16:29:45.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!aHtW!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fab1b239e-6abf-4ac0-83c6-db9bea33419a_1376x768.png"
+  },
+  {
+    "title": "The Abstraction Tax",
+    "description": "Let's talk about how a simple a + b works in Python",
+    "url": "https://thefirstderivative.substack.com/p/the-abstraction-tax",
+    "date": "2026-01-19T17:19:25.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!IELB!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc078646b-f0b7-488d-8dee-48ac786f8a11_2816x1536.png"
+  },
+  {
+    "title": "Node.js and a Single Thread",
+    "description": "A tale of how Node.js works on a single threaded architecture,",
+    "url": "https://thefirstderivative.substack.com/p/thread-the-node",
+    "date": "2026-01-03T17:19:19.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!cvmz!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F89488b79-0a48-49db-822a-6c64389091d8_2816x1536.png"
+  },
+  {
+    "title": "Rewind 2025: The Grain by Kashyab",
+    "description": "As the '25 season comes to an end, we look back at how it went at The Grain.",
+    "url": "https://thefirstderivative.substack.com/p/rewind-2025-the-grain-by-kashyab",
+    "date": "2025-12-30T17:19:25.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!s0H_!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9fa10c2b-c997-4947-bd52-b02236ec15c9_2816x1536.png"
+  },
+  {
+    "title": "Holiday Edition - How I built a video search engine?",
+    "description": "TL;DR: I built a system that lets you Cmd+F inside a video file. If you search for \"flying squirrel,\" it finds the exact timestamp(s) where a squirrel appears. Here are my notes on it:",
+    "url": "https://thefirstderivative.substack.com/p/holiday-edition-how-i-built-a-video",
+    "date": "2025-12-20T19:20:19.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!RU5D!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F292bc3a9-bb09-4444-9b68-5207fb8bdcd3_1024x559.jpeg"
+  },
+  {
+    "title": "How I optimized a semantic cache?",
+    "description": "You are building a standard RAG app. You open your OpenAI dashboard. You see a $1000 bill. What do you do?",
+    "url": "https://thefirstderivative.substack.com/p/how-i-optimized-a-semantic-cache",
+    "date": "2025-12-13T23:41:44.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!xHL4!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F517da547-ab95-4da4-b276-6b1235ef367f_2816x1536.png"
+  },
+  {
+    "title": "How to design a circuit breaker?",
+    "description": "Did you know? Me neither. Let's learn about circuit breaker pattern today.",
+    "url": "https://thefirstderivative.substack.com/p/how-to-design-a-circuit-breaker",
+    "date": "2025-08-28T18:01:30.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!JPBr!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F5fa91c81-396b-48fb-9629-58cfe95b9bbb_2048x1152.webp"
+  },
+  {
+    "title": "The Citation Economy",
+    "description": "A new way of optimizing content in the AI-first world and how to design a generative optimization system",
+    "url": "https://thefirstderivative.substack.com/p/how-to-design-a-geo-generative-engine",
+    "date": "2025-08-06T18:01:34.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!8Ujk!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F7d4390d1-c243-4df1-b524-620542d41880_1376x768.png"
+  },
+  {
+    "title": "How to design a message queue like Kafka and RabbitMQ?",
+    "description": "Queue-based systems are at the forefront of most apps today (pun-intended) but how do they work?",
+    "url": "https://thefirstderivative.substack.com/p/how-to-design-a-message-queue-like",
+    "date": "2025-07-30T18:00:25.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!cMQD!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F0f81cb81-8db8-46b5-a559-cc2c0341a5c2_1376x768.webp"
+  },
+  {
+    "title": "How to design a vector database like Pinecone?",
+    "description": "Modern AI apps thrive on a vector database. Learn how it works:",
+    "url": "https://thefirstderivative.substack.com/p/how-to-design-a-vector-database-like",
+    "date": "2025-07-23T18:00:37.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!Nojp!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F3f6a2f85-396f-4add-953b-f7d1692cbc0d_1376x768.png"
+  },
+  {
+    "title": "How to design a load balancer?",
+    "description": "Find the Easter Egg. Clue: It's in the last three blogs I wrote about.",
+    "url": "https://thefirstderivative.substack.com/p/how-to-design-a-load-balancer",
+    "date": "2025-07-16T16:15:27.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!lzJE!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F48ff2ac8-294c-419c-8486-58186ee29273_1376x768.png"
+  },
+  {
+    "title": "How to design a rate limiter?",
+    "description": "What is a rate limiter?",
+    "url": "https://thefirstderivative.substack.com/p/how-to-design-a-rate-limiter",
+    "date": "2025-07-08T17:30:33.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!lzJE!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F48ff2ac8-294c-419c-8486-58186ee29273_1376x768.png"
+  },
+  {
+    "title": "How to design a webhook?",
+    "description": "Paid for something through Stripe, but received an acknowledgement from the buyer?",
+    "url": "https://thefirstderivative.substack.com/p/how-to-design-a-webhook",
+    "date": "2025-07-01T16:02:16.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!0fS-!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fe4df0683-ae57-43b5-b37c-8644b8012f12_775x366.png"
+  },
+  {
+    "title": "How to design an autocomplete system?",
+    "description": "You would not have failed the autocomplete, but it would have failed you in many occasions (luck turns into duck, seriously?). Although, have you ever wondered how the autocomplete system works?",
+    "url": "https://thefirstderivative.substack.com/p/how-to-design-an-autocomplete-system",
+    "date": "2025-06-24T16:02:53.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!g1aA!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fd7330dcb-cfd5-4c65-9cca-b0b77ababf7b_1201x785.png"
+  },
+  {
+    "title": "How to design a notification system? Part 2",
+    "description": "Earth has a core. Nuclear reactors have a core, and so does a Notification system. Essentially, a system boils down to how its core works",
+    "url": "https://thefirstderivative.substack.com/p/how-to-design-a-notification-system",
+    "date": "2025-06-11T14:02:38.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!QvFg!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff1d7d189-1582-45fa-b833-2992ac2dbbba_1155x312.png"
+  },
+  {
+    "title": "How to design a notification system? Part 1",
+    "description": "You get close to ~100 notifications a day, starting from your best friend's texts to your stocks dropping 550%. Ever wondered how the companies engineer these notification systems?",
+    "url": "https://thefirstderivative.substack.com/p/robinhoods-notification-system-1",
+    "date": "2025-06-03T14:19:20.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!ZYsn!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F999a7835-a3a6-45bb-bf25-f321f9db16a3_738x434.png"
+  },
+  {
+    "title": "Scan, Approve, Access: The Magic Behind QR Code Login on Farcaster 🪄",
+    "description": "Everyone uses QR Code all the time. I do. You do. We do. Ever wondered how the system behind the QR works? Ever wondered how a system like Google Authenticator works?",
+    "url": "https://thefirstderivative.substack.com/p/scan-approve-access-the-magic-behind",
+    "date": "2025-05-28T12:33:18.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!0v0y!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Ff206cb7d-9e59-4a98-96a9-b104f60a16d3_1284x633.avif"
+  },
+  {
+    "title": "Today's topic: AWS Lambda",
+    "description": "There are times when I want to sit down with my thinking assistant to ask dumb questions to understand different concepts, and the time has come. This is my attempt in understanding what lambdas are.",
+    "url": "https://thefirstderivative.substack.com/p/todays-topic-aws-lambda",
+    "date": "2025-05-26T16:22:59.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!rM7b!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F20dd8724-af35-4577-9420-9079d818cd2b_500x365.png"
+  },
+  {
+    "title": "My notes on Account Abstraction",
+    "description": "The new way of onboarding users on to web3",
+    "url": "https://thefirstderivative.substack.com/p/my-notes-on-account-abstraction",
+    "date": "2024-10-26T03:07:22.000Z",
+    "image": "https://substackcdn.com/image/fetch/$s_!gmw6!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2Fc51fc930-79b0-42a6-93c2-4a1e7f1f78ee_1712x601.jpeg"
+  }
+]

@@ -1,6 +1,10 @@
 User-agent: *
 Allow: /
 
+# OpenAI search discovery and citations
+User-agent: OAI-SearchBot
+Allow: /
+
 # Sitemap
 Sitemap: https://kashyab.xyz/sitemap.xml
 

@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { updateSEO, generateStructuredData } from "../utils/seo";
-import { getAllPosts, getPostBySlug } from "../utils/posts";
+import { getPostBySlug } from "../utils/posts";
 
-export function useSEO({ title, description, image, type, postSlug }) {
+export function useSEO({ title, description, image, type, postSlug, structuredData: suppliedStructuredData }) {
   const location = useLocation();
 
   useEffect(() => {
     let metaDescription = description;
     let metaTitle = title;
-    let structuredData = null;
+    let structuredData = suppliedStructuredData || null;
 
     // Handle blog posts
     if (postSlug) {
@@ -29,7 +29,7 @@ export function useSEO({ title, description, image, type, postSlug }) {
           url: `${window.location.origin}/${post.slug}`,
         });
       }
-    } else {
+    } else if (!structuredData) {
       // Default structured data for person
       structuredData = generateStructuredData({ type: "Person" });
     }
@@ -57,5 +57,5 @@ export function useSEO({ title, description, image, type, postSlug }) {
       // Reset to default on unmount
       updateSEO({});
     };
-  }, [location.pathname, title, description, image, type, postSlug]);
+  }, [location.pathname, title, description, image, type, postSlug, suppliedStructuredData]);
 }

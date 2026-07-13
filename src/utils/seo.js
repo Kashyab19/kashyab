@@ -1,10 +1,13 @@
+import { profile } from "../data/profile";
+
 // SEO utility functions
 export const siteConfig = {
-  name: "Kashyab Murali",
-  title: "Kashyab Murali - Backend Engineer & Systems Thinker",
-  description: "I study systems. Whether it is history, economics, or computer science, I am obsessed with how complex parts fit together to function as a whole. I take this understanding of broad mechanics and apply it to backend engineering.",
-  url: "https://kashyab.xyz",
-  image: "https://kashyab.xyz/og-image.jpg",
+  name: profile.name,
+  title: "Kashyab Murali | Engineer Building AI-Native Systems",
+  description: profile.summary,
+  url: profile.website,
+  image: "https://kashyab.xyz/og.png",
+  imageAlt: "Kashyab Murali, AI-native software and backend systems",
   twitter: "@karpathism",
 };
 
@@ -31,11 +34,15 @@ export function updateSEO({ title, description, image, url, type = "website" }) 
   // Basic meta tags
   updateMetaTag("description", fullDescription);
   updateMetaTag("author", siteConfig.name);
+  updateMetaTag("robots", "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1");
 
   // Open Graph tags
   updateMetaTag("og:title", fullTitle, "property");
   updateMetaTag("og:description", fullDescription, "property");
   updateMetaTag("og:image", fullImage, "property");
+  updateMetaTag("og:image:alt", siteConfig.imageAlt, "property");
+  updateMetaTag("og:image:width", "1200", "property");
+  updateMetaTag("og:image:height", "630", "property");
   updateMetaTag("og:url", fullUrl, "property");
   updateMetaTag("og:type", type, "property");
   updateMetaTag("og:site_name", siteConfig.name, "property");
@@ -45,6 +52,7 @@ export function updateSEO({ title, description, image, url, type = "website" }) 
   updateMetaTag("twitter:title", fullTitle);
   updateMetaTag("twitter:description", fullDescription);
   updateMetaTag("twitter:image", fullImage);
+  updateMetaTag("twitter:image:alt", siteConfig.imageAlt);
   updateMetaTag("twitter:creator", siteConfig.twitter);
 
   // Canonical URL
@@ -58,6 +66,55 @@ export function updateSEO({ title, description, image, url, type = "website" }) 
 }
 
 const personId = `${siteConfig.url}/#person`;
+
+export function personStructuredData() {
+  return {
+    "@type": "Person",
+    "@id": personId,
+    name: siteConfig.name,
+    url: siteConfig.url,
+    image: `${siteConfig.url}/og.png`,
+    jobTitle: profile.jobTitle,
+    description: siteConfig.description,
+    knowsAbout: profile.knowsAbout,
+    worksFor: {
+      "@type": "Organization",
+      name: profile.employer,
+    },
+    alumniOf: [
+      { "@type": "Organization", name: "Tradible Marketplace", url: "https://tradible.io" },
+      { "@type": "Organization", name: "Verizon", url: "https://verizon.com" },
+      { "@type": "Organization", name: "summerize.ai", url: "https://summerize.ai" },
+    ],
+    sameAs: profile.sameAs,
+  };
+}
+
+export function profilePageStructuredData() {
+  const person = personStructuredData();
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${siteConfig.url}/#website`,
+        url: siteConfig.url,
+        name: siteConfig.name,
+        description: siteConfig.description,
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": `${siteConfig.url}/#profile-page`,
+        url: siteConfig.url,
+        name: siteConfig.title,
+        description: siteConfig.description,
+        isPartOf: { "@id": `${siteConfig.url}/#website` },
+        mainEntity: { "@id": personId },
+      },
+      person,
+    ],
+  };
+}
 
 export function generateStructuredData({ type, title, description, datePublished, dateModified, url }) {
   if (type === "BlogPosting") {
@@ -73,17 +130,5 @@ export function generateStructuredData({ type, title, description, datePublished
     };
   }
 
-  return {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "@id": personId,
-    name: siteConfig.name,
-    url: siteConfig.url,
-    sameAs: [
-      "https://www.linkedin.com/in/kashyab-murali/",
-      "https://github.com/Kashyab19",
-      "https://x.com/karpathism",
-      "https://thefirstderivative.substack.com/",
-    ],
-  };
+  return { "@context": "https://schema.org", ...personStructuredData() };
 }
