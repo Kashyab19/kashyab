@@ -13,8 +13,9 @@ const outputPath = join(__dirname, '../public/sitemap.xml');
 
 const staticRoutes = [
   { path: '/', changefreq: 'weekly', priority: '1.0' },
-  { path: '/writings', changefreq: 'weekly', priority: '0.8' },
-  { path: '/influence', changefreq: 'monthly', priority: '0.7' },
+  { path: '/about/', changefreq: 'monthly', priority: '0.9' },
+  { path: '/writings', changefreq: 'weekly', priority: '0.9' },
+  { path: '/influence', changefreq: 'monthly', priority: '0.4' },
   { path: '/claurden', changefreq: 'monthly', priority: '0.5' },
 ];
 

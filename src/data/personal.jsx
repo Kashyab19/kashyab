@@ -1,4 +1,4 @@
-import React from "react";
+import { profile } from "./profile";
 
 // Social icons SVG paths
 const socialIcons = {
@@ -68,61 +68,45 @@ export const socialLinks = [
 ];
 
 export const personalInfo = {
-  name: "Kashyab",
-  heading: "Hi, I am Kashyab!",
-  bio: "I study systems. Whether it is history, economics, or computer science, I am obsessed with how complex parts fit together to function as a whole. I take this understanding of broad mechanics and apply it to backend engineering. I do not just write code. I build infrastructure that supports real business needs. When I am not shipping software, I am writing about the intersection of technology and the economy or doing deadlifts.",
-  current: "Tinkering and figuring out. Even thinking of brewing my own beer.",
+  name: profile.name,
+  heading: profile.name,
+  role: profile.role,
+  bio: profile.bio,
+  current: profile.current,
 };
 
-export const works = [
-  {
-    title: "Founding Engineer at Tradible Marketplace",
-    url: "https://tradible.io",
-    description: "A marketplace for real world collectibles. Built the platform from 0 - 1 in 6 months",
-  },
-  {
-    title: "Software Engineer at Verizon",
-    url: "https://verizon.com",
-    description: "Built and maintained the receipt management system for 140M customers (high bills? not my problem)",
-  },
-  {
-    title: "Product and Engineering at summerize.ai",
-    url: "https://summerize.ai",
-    description: "Built an AI-powered one-click summary tool that worked on websites, videos, and PDFs. Reached 300 organic users in less than 10 days",
-  },
-  {
-    title: "Thinking and writing about how systems work?",
-    url: "https://thefirstderivative.substack.com/",
-    description: "Wrote nearly 10+ system design topics on my Substack. Grew it 1500 views and 35 subscribers.",
-  },
-];
+export const works = profile.experience;
 
 export const projects = [
   {
+    title: "PG Almanack",
+    url: "https://pgalmanack.com",
+    description: "A carefully typeset, searchable library of Paul Graham's essays with reading metadata and notes.",
+    detail: "Astro, catalog search, and RSS",
+  },
+  {
     title:"Semantic Cuts",
-    url: "https://www.linkedin.com/posts/kashyab-murali_systemdesign-vectordatabase-engineering-activity-7406685345976848385-uQq0?utm_source=share&utm_medium=member_desktop&rcm=ACoAAB8IVhoB1Gq8VH1IrUtiDWdbV5-16TuhrhE",
+    url: "https://github.com/Kashyab19/semantic-cuts",
     github: "https://github.com/Kashyab19/semantic-cuts",
-    description: "Search for a clipping in your videos using just a prompt (E.g., Where did Lex talk about aliens?). Building using CLIP by OpenAI, Redpanda and Qdrant DB",
-    type: "project",
-    year: 2025,
-    wip: true,
+    description: "Natural-language search for video, returning the exact moment that matches a prompt.",
+    detail: "CLIP, Redpanda, and Qdrant",
+    articleUrl: "https://thefirstderivative.substack.com/p/holiday-edition-how-i-built-a-video",
+    demoUrl: "https://www.youtube.com/watch?v=CmIjUL-AmjY",
   },
 
   {
     title: "Cacheflow",
     url: "https://github.com/Kashyab19/cacheflow",
-    description: "A simple semantic caching layer for LLM responses using vector embeddings and Qdrant",
-    type: "project",
-    year: 2025,
-    wip: true,
+    description: "A semantic caching layer that reduces repeated LLM calls using vector similarity.",
+    detail: "Embeddings, cache policy, and Qdrant",
+    articleUrl: "https://thefirstderivative.substack.com/p/how-i-optimized-a-semantic-cache",
+    demoUrl: "https://www.youtube.com/watch?v=68Swoa0HFlk",
   },
   {
     title: "ERC1155 to ERC20 converter",
     url: "https://github.com/Kashyab19/erc1155-to-erc20",
-    description: "Migrating ERC 1155 to ERC 20 converter using Foundry",
-    type: "mini",
-    year: 2025,
-    wip: false,
+    description: "A migration path from ERC-1155 assets to ERC-20 contracts using Foundry.",
+    detail: "Solidity and Foundry",
   },
 ];
 
@@ -206,7 +190,7 @@ export const articles = [
 
 // "Ideas I owe to people" — takeaway is what they taught me, not a description.
 export const people = [
-  { name: "Murali Seshadri", takeaway: "25 years of building a great small business" },
+  { name: "Murali Seshadri", takeaway: "Building a great small business over 25 years." },
   { name: "Charlie Munger", takeaway: "Mental models, clear thinking, long-termism." },
   { name: "Naval Ravikant", takeaway: "Building a company that lasts" },
   { name: "David Senra", takeaway: "Storytelling and compounded my learning speed" },
@@ -254,4 +238,3 @@ export const videos = [
     github: "https://github.com/Kashyab19/polylend",
   }
 ];
-
