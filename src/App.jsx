@@ -129,7 +129,7 @@ function Home() {
     <main className="home-page">
       <section className="home-hero" aria-labelledby="home-title">
         <div className="hero-copy">
-          <p className="hero-kicker">Backend systems + applied AI</p>
+          <p className="hero-kicker">Backend systems + Applied AI</p>
           <h1 id="home-title">{personalInfo.heading}</h1>
           <p className="hero-role">{personalInfo.role}</p>
           <p className="hero-bio">{personalInfo.bio}</p>
