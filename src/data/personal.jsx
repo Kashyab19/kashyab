@@ -165,7 +165,7 @@ export const podcasts = [
   },
 ];
 
-export const podcastsUpdatedOn = "2025-02-24";
+export const podcastsUpdatedOn = "2026-07-14";
 
 export const books = [
   {
