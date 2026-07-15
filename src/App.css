@@ -269,7 +269,7 @@ button:focus-visible {
 }
 
 .home-section {
-  padding: 80px 0 96px;
+  padding: 64px 0 72px;
   border-top: 1px solid var(--border-color);
 }
 
@@ -375,10 +375,6 @@ a:hover .external-arrow {
 
 .writing-row {
   border-top: 1px solid var(--border-color);
-}
-
-.writing-row:last-child {
-  border-bottom: 1px solid var(--border-color);
 }
 
 .writing-row > a {
@@ -499,6 +495,12 @@ a:hover .external-arrow {
   align-items: baseline;
   padding: 22px 0;
   border-bottom: 1px solid var(--border-color);
+}
+
+.project-row:last-child,
+.experience-list li:last-child,
+.people-list li:last-child {
+  border-bottom: 0;
 }
 
 .person-name {
@@ -782,7 +784,7 @@ td {
   }
 
   .home-section {
-    padding: 60px 0 72px;
+    padding: 48px 0 56px;
   }
 
   .section-heading {

@@ -3,7 +3,6 @@ import {
   podcasts,
   podcastsUpdatedOn,
   books,
-  articles,
   people,
 } from "../../data/personal.jsx";
 import { formatDate } from "../../utils/formatDate";
@@ -54,7 +53,7 @@ function InfluenceList({ items, renderItem, emptyText }) {
 
 function Takeaway({ text }) {
   if (!text) return null;
-  return <span className="text-tertiary influence-description">— {text}</span>;
+  return <span className="text-tertiary influence-description">{" — "}{text}</span>;
 }
 
 function renderLinked(item, labelKey) {
@@ -78,7 +77,7 @@ function Influence() {
   useSEO({
     title: "Influence",
     description:
-      "Podcasts, books, articles, and people that shaped my thinking about systems, technology, and business.",
+      "Podcasts, books, and people that shaped my thinking about systems, technology, and business.",
   });
 
   return (
@@ -119,23 +118,6 @@ function Influence() {
                 <span className="influence-meta"> by {book.author}</span>
               )}
               <Takeaway text={book.takeaway} />
-            </>
-          )}
-        />
-      </section>
-
-      <section className="section-item">
-        <h2 className="section-title">Articles</h2>
-        <InfluenceList
-          items={articles}
-          emptyText="Building this list. Check back."
-          renderItem={(article) => (
-            <>
-              {renderLinked(article, "title")}
-              {article.source && (
-                <span className="influence-meta"> · {article.source}</span>
-              )}
-              <Takeaway text={article.takeaway} />
             </>
           )}
         />
